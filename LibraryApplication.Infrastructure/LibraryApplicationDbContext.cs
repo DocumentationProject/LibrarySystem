@@ -69,7 +69,8 @@ public sealed class LibraryApplicationDbContext: DbContext
 
         modelBuilder.Entity<UserBalanceEntity>()
             .HasOne(x => x.UserEntity)
-            .WithOne(x => x.UserBalanceEntity);
+            .WithOne(x => x.UserBalanceEntity)
+            .HasForeignKey<UserEntity>(x => x.Id);
 
         modelBuilder.Entity<UserEntity>()
             .HasMany(x => x.UserCategories)
