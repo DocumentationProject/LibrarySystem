@@ -2,7 +2,7 @@
 
 namespace LibraryApplication.Data.Database.Entities;
 
-public class BookTransfer : IEntityBase
+public class BookTransferEntity : IEntityBase
 {
     public int Id { get; set; }
 
@@ -20,11 +20,11 @@ public class BookTransfer : IEntityBase
 
     public DateTime ExpectedReturnDate { get; set; }
 
-    public virtual Book Book { get; set; }
+    public virtual BookEntity BookEntity { get; set; }
 
-    public virtual User User { get; set; }
+    public virtual UserEntity UserEntity { get; set; }
 
-    public virtual Discount Discount { get; set; }
+    public virtual DiscountEntity DiscountEntity { get; set; }
     
-    public virtual List<Fine> Fines { get; set; }
+    public virtual List<FineEntity> Fines { get; set; }
 }

@@ -2,7 +2,7 @@
 
 namespace LibraryApplication.Data.Database.Entities;
 
-public class User : IEntityBase
+public class UserEntity : IEntityBase
 {
     public int Id { get; set; }
 
@@ -20,11 +20,11 @@ public class User : IEntityBase
 
     public DateTime RegisterDate { get; set; }
 
-    public virtual List<UserCategory> UserCategories { get; set; } = new();
+    public virtual List<UserCategoryEntity> UserCategories { get; set; } = new();
 
-    public virtual List<Fine> Fines { get; set; }
+    public virtual List<FineEntity> Fines { get; set; }
 
-    public virtual UserBalance UserBalance { get; set; }
+    public virtual UserBalanceEntity UserBalanceEntity { get; set; }
 
-    public virtual List<UserBalanceTransfer> UserBalanceTransfers { get; set; }
+    public virtual List<UserBalanceTransferEntity> UserBalanceTransfers { get; set; }
 }

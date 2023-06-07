@@ -2,7 +2,7 @@
 
 namespace LibraryApplication.Data.Database.Entities;
 
-public class BudgetTransfer : IEntityBase
+public class BudgetTransferEntity : IEntityBase
 {
     public int Id { get; set; }
 

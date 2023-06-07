@@ -2,7 +2,7 @@
 
 namespace LibraryApplication.Data.Database.Entities;
 
-public class UserBalance : IEntityBase
+public class UserBalanceEntity : IEntityBase
 {
     public int Id { get; set; }
 
@@ -10,5 +10,5 @@ public class UserBalance : IEntityBase
 
     public double Amount { get; set; }
 
-    public virtual User User { get; set; }
+    public virtual UserEntity UserEntity { get; set; }
 }
