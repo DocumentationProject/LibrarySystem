@@ -21,4 +21,5 @@ public class BookEntity : IEntityBase
     public virtual BookGenre Genre { get; set; }
 
     public virtual List<BookTransferEntity> BookTransfers { get; set; }
+    public virtual List<FineEntity> Fines { get; set; }
 }

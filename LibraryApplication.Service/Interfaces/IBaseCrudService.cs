@@ -1,8 +1,8 @@
 ﻿using LibraryApplication.Data.Database.Base;
 
-namespace LibraryApplication.Data.Interfaces.Repositories;
+namespace LibraryApplication.Service.Interfaces;
 
-public interface IBaseCrudRepository<T> where T:IEntityBase
+public interface IBaseCrudService<T> where T : IEntityBase
 {
     IEnumerable<T> GetAll();
 

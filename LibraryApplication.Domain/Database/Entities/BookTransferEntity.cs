@@ -26,5 +26,4 @@ public class BookTransferEntity : IEntityBase
 
     public virtual DiscountEntity DiscountEntity { get; set; }
     
-    public virtual List<FineEntity> Fines { get; set; }
 }

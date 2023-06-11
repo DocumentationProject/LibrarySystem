@@ -20,11 +20,13 @@ public class UserEntity : IEntityBase
 
     public DateTime RegisterDate { get; set; }
 
+    public double Amount { get; set; }
+
     public virtual List<UserCategoryEntity> UserCategories { get; set; } = new();
 
     public virtual List<FineEntity> Fines { get; set; }
 
-    public virtual UserBalanceEntity UserBalanceEntity { get; set; }
-
     public virtual List<UserBalanceTransferEntity> UserBalanceTransfers { get; set; }
+
+    public virtual List<BookEntity> Books { get; set; }
 }

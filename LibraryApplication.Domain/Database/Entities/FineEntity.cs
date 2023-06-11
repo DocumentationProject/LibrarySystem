@@ -8,7 +8,7 @@ public class FineEntity : IEntityBase
 
     public int UserId { get; set; }
 
-    public int BookTransferId { get; set; }
+    public int BookId { get; set; }
 
     public double Amount { get; set; }
 
@@ -16,5 +16,5 @@ public class FineEntity : IEntityBase
 
     public virtual UserEntity UserEntity { get; set; }
 
-    public virtual BookTransferEntity BookTransferEntity { get; set; }
+    public virtual BookEntity BookEntity { get; set; }
 }

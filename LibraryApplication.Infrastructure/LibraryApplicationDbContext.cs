@@ -28,7 +28,6 @@ public sealed class LibraryApplicationDbContext: DbContext
 
     public DbSet<UserEntity> Users => Set<UserEntity>();
 
-    public DbSet<UserBalanceEntity> UserBalances => Set<UserBalanceEntity>();
 
     public DbSet<UserBalanceTransferEntity> UserBalanceTransfers => Set<UserBalanceTransferEntity>();
 
@@ -63,14 +62,9 @@ public sealed class LibraryApplicationDbContext: DbContext
             .OnDelete(DeleteBehavior.NoAction);
         
         modelBuilder.Entity<FineEntity>()
-            .HasOne(x => x.BookTransferEntity)
+            .HasOne(x => x.BookEntity)
             .WithMany(x => x.Fines)
-            .HasForeignKey(x => x.BookTransferId);
-
-        modelBuilder.Entity<UserBalanceEntity>()
-            .HasOne(x => x.UserEntity)
-            .WithOne(x => x.UserBalanceEntity)
-            .HasForeignKey<UserEntity>(x => x.Id);
+            .HasForeignKey(x => x.BookId);
 
         modelBuilder.Entity<UserEntity>()
             .HasMany(x => x.UserCategories)

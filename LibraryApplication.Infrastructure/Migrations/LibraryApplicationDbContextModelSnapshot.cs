@@ -89,7 +89,7 @@ namespace LibraryApplication.Infrastructure.Migrations
                     b.ToTable("BookGenres");
                 });
 
-            modelBuilder.Entity("LibraryApplication.Data.Database.Entities.BookTransferEntity", b =>
+            modelBuilder.Entity("LibraryApplication.Data.Database.Entities.BookEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -358,7 +358,7 @@ namespace LibraryApplication.Infrastructure.Migrations
                     b.Navigation("Genre");
                 });
 
-            modelBuilder.Entity("LibraryApplication.Data.Database.Entities.BookTransferEntity", b =>
+            modelBuilder.Entity("LibraryApplication.Data.Database.Entities.BookEntity", b =>
                 {
                     b.HasOne("LibraryApplication.Data.Database.Entities.BookEntity", "BookEntity")
                         .WithMany("BookTransfers")
@@ -396,7 +396,7 @@ namespace LibraryApplication.Infrastructure.Migrations
 
             modelBuilder.Entity("LibraryApplication.Data.Database.Entities.FineEntity", b =>
                 {
-                    b.HasOne("LibraryApplication.Data.Database.Entities.BookTransferEntity", "BookTransferEntity")
+                    b.HasOne("LibraryApplication.Data.Database.Entities.BookEntity", "BookEntity")
                         .WithMany("Fines")
                         .HasForeignKey("BookTransferId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -408,7 +408,7 @@ namespace LibraryApplication.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("BookTransferEntity");
+                    b.Navigation("BookEntity");
 
                     b.Navigation("UserEntity");
                 });
@@ -473,7 +473,7 @@ namespace LibraryApplication.Infrastructure.Migrations
                     b.Navigation("Books");
                 });
 
-            modelBuilder.Entity("LibraryApplication.Data.Database.Entities.BookTransferEntity", b =>
+            modelBuilder.Entity("LibraryApplication.Data.Database.Entities.BookEntity", b =>
                 {
                     b.Navigation("Fines");
                 });
