@@ -10,7 +10,7 @@ public interface IBaseCrudRepository<T> where T:IEntityBase
 
     Task<T> GetById(int id);
 
-    Task<int> Update(int id, T entity);
+    Task<bool> Update(int id, T entity);
 
-    Task<int> Delete(int id);
+    Task<bool> Delete(int id);
 }
