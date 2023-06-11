@@ -2,7 +2,7 @@
 
 namespace LibraryApplication.Data.Database.Entities;
 
-public class Discount : IEntityBase
+public class DiscountEntity : IEntityBase
 {
     public int Id { get; set; }
 
@@ -10,5 +10,5 @@ public class Discount : IEntityBase
 
     public int Amount { get; set; }
 
-    public virtual List<BookTransfer> BookTransfers { get; set; }
+    public virtual List<BookTransferEntity> BookTransfers { get; set; }
 }

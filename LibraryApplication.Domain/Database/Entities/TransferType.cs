@@ -8,7 +8,7 @@ public class TransferType : IEntityBase
 
     public string Name { get; set; }
 
-    public virtual List<UserBalanceTransfer> UserBalanceTransfers { get; set; }
+    public virtual List<UserBalanceTransferEntity> UserBalanceTransfers { get; set; }
 
-    public virtual List<BudgetTransfer> BudgetTransfers { get; set; }
+    public virtual List<BudgetTransferEntity> BudgetTransfers { get; set; }
 }

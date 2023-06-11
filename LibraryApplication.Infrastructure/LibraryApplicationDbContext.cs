@@ -10,82 +10,83 @@ public sealed class LibraryApplicationDbContext: DbContext
         Database.EnsureCreated();
     }
 
-    public DbSet<Author> Authors => Set<Author>();
+    public DbSet<AuthorEntity> Authors => Set<AuthorEntity>();
     
-    public DbSet<Book> Books => Set<Book>();
+    public DbSet<BookEntity> Books => Set<BookEntity>();
     
     public DbSet<BookGenre> BookGenres => Set<BookGenre>();
     
-    public DbSet<BookTransfer> BookTransfers => Set<BookTransfer>();
+    public DbSet<BookTransferEntity> BookTransfers => Set<BookTransferEntity>();
     
-    public DbSet<BudgetTransfer> BudgetTransfers => Set<BudgetTransfer>();
+    public DbSet<BudgetTransferEntity> BudgetTransfers => Set<BudgetTransferEntity>();
     
-    public DbSet<Discount> Discounts => Set<Discount>();
+    public DbSet<DiscountEntity> Discounts => Set<DiscountEntity>();
     
-    public DbSet<Fine> Fines => Set<Fine>();
+    public DbSet<FineEntity> Fines => Set<FineEntity>();
     
     public DbSet<TransferType> TransferTypes => Set<TransferType>();
 
-    public DbSet<User> Users => Set<User>();
+    public DbSet<UserEntity> Users => Set<UserEntity>();
 
-    public DbSet<UserBalance> UserBalances => Set<UserBalance>();
+    public DbSet<UserBalanceEntity> UserBalances => Set<UserBalanceEntity>();
 
-    public DbSet<UserBalanceTransfer> UserBalanceTransfers => Set<UserBalanceTransfer>();
+    public DbSet<UserBalanceTransferEntity> UserBalanceTransfers => Set<UserBalanceTransferEntity>();
 
-    public DbSet<UserCategory> UserCategories => Set<UserCategory>();
+    public DbSet<UserCategoryEntity> UserCategories => Set<UserCategoryEntity>();
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Book>()
-            .HasOne(x => x.Author)
+        modelBuilder.Entity<BookEntity>()
+            .HasOne(x => x.AuthorEntity)
             .WithMany(x => x.Books)
             .HasForeignKey(x => x.AuthorId);
         
-        modelBuilder.Entity<Book>()
+        modelBuilder.Entity<BookEntity>()
             .HasOne(x => x.Genre)
             .WithMany(x => x.Books)
             .HasForeignKey(x => x.GenreId);
         
-        modelBuilder.Entity<BookTransfer>()
-            .HasOne(x => x.Book)
+        modelBuilder.Entity<BookTransferEntity>()
+            .HasOne(x => x.BookEntity)
             .WithMany(x => x.BookTransfers)
             .HasForeignKey(x => x.BookId);
         
-        modelBuilder.Entity<BookTransfer>()
-            .HasOne(x => x.Discount)
+        modelBuilder.Entity<BookTransferEntity>()
+            .HasOne(x => x.DiscountEntity)
             .WithMany(x => x.BookTransfers)
             .HasForeignKey(x => x.DiscountId);
 
-        modelBuilder.Entity<Fine>()
-            .HasOne(x => x.User)
+        modelBuilder.Entity<FineEntity>()
+            .HasOne(x => x.UserEntity)
             .WithMany(x => x.Fines)
             .HasForeignKey(x => x.UserId)
             .OnDelete(DeleteBehavior.NoAction);
         
-        modelBuilder.Entity<Fine>()
-            .HasOne(x => x.BookTransfer)
+        modelBuilder.Entity<FineEntity>()
+            .HasOne(x => x.BookTransferEntity)
             .WithMany(x => x.Fines)
             .HasForeignKey(x => x.BookTransferId);
 
-        modelBuilder.Entity<UserBalance>()
-            .HasOne(x => x.User)
-            .WithOne(x => x.UserBalance);
+        modelBuilder.Entity<UserBalanceEntity>()
+            .HasOne(x => x.UserEntity)
+            .WithOne(x => x.UserBalanceEntity)
+            .HasForeignKey<UserEntity>(x => x.Id);
 
-        modelBuilder.Entity<User>()
+        modelBuilder.Entity<UserEntity>()
             .HasMany(x => x.UserCategories)
             .WithMany(x => x.Users);
         
-        modelBuilder.Entity<UserBalanceTransfer>()
-            .HasOne(x => x.User)
+        modelBuilder.Entity<UserBalanceTransferEntity>()
+            .HasOne(x => x.UserEntity)
             .WithMany(x => x.UserBalanceTransfers)
             .HasForeignKey(x => x.UserId);
         
-        modelBuilder.Entity<UserBalanceTransfer>()
+        modelBuilder.Entity<UserBalanceTransferEntity>()
             .HasOne(x => x.TransferType)
             .WithMany(x => x.UserBalanceTransfers)
             .HasForeignKey(x => x.TransferTypeId);
         
-        modelBuilder.Entity<BudgetTransfer>()
+        modelBuilder.Entity<BudgetTransferEntity>()
             .HasOne(x => x.TransferType)
             .WithMany(x => x.BudgetTransfers)
             .HasForeignKey(x => x.TransferTypeId);

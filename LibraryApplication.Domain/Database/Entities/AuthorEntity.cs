@@ -2,7 +2,7 @@
 
 namespace LibraryApplication.Data.Database.Entities;
 
-public class Author : IEntityBase
+public class AuthorEntity : IEntityBase
 {
     public int Id { get; set; }
 
@@ -10,5 +10,5 @@ public class Author : IEntityBase
 
     public string Surname { get; set; }
 
-    public virtual List<Book> Books { get; set; }
+    public virtual List<BookEntity> Books { get; set; }
 }

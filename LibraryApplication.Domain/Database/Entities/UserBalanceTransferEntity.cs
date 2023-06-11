@@ -2,7 +2,7 @@
 
 namespace LibraryApplication.Data.Database.Entities;
 
-public class UserBalanceTransfer : IEntityBase
+public class UserBalanceTransferEntity : IEntityBase
 {
     public int Id { get; set; }
 
@@ -14,7 +14,7 @@ public class UserBalanceTransfer : IEntityBase
 
     public int TransferTypeId { get; set; }
 
-    public virtual User User { get; set; }
+    public virtual UserEntity UserEntity { get; set; }
 
     public virtual TransferType TransferType { get; set; }
 }   

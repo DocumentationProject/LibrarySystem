@@ -2,7 +2,7 @@
 
 namespace LibraryApplication.Data.Database.Entities;
 
-public class Fine : IEntityBase
+public class FineEntity : IEntityBase
 {
     public int Id { get; set; }
 
@@ -14,7 +14,7 @@ public class Fine : IEntityBase
 
     public DateTime Date { get; set; }
 
-    public virtual User User { get; set; }
+    public virtual UserEntity UserEntity { get; set; }
 
-    public virtual BookTransfer BookTransfer { get; set; }
+    public virtual BookTransferEntity BookTransferEntity { get; set; }
 }
