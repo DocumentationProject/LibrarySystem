@@ -8,7 +8,7 @@ public interface IBaseCrudRepository<T> where T:IEntityBase
 
     Task<int> Create(T entity);
 
-    Task<T> GetById();
+    Task<T> GetById(int id);
 
     Task<int> Update(int id, T entity);
 
