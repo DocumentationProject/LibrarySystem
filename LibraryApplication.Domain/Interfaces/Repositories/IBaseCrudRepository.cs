@@ -4,11 +4,13 @@ namespace LibraryApplication.Data.Interfaces.Repositories;
 
 public interface IBaseCrudRepository<T> where T:IEntityBase
 {
-    IEnumerable<T> GetAll();
+    Task<IEnumerable<T>> GetAll();
 
-    T GetById();
+    Task<int> Create(T entity);
 
-    int Update(int id, T entity);
+    Task<T> GetById();
 
-    int Delete(int id);
+    Task<int> Update(int id, T entity);
+
+    Task<int> Delete(int id);
 }

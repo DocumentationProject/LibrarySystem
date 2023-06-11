@@ -18,6 +18,8 @@ public class UserEntity : IEntityBase
 
     public string Password { get; set; }
 
+    public double Balance { get; set; }
+
     public DateTime RegisterDate { get; set; }
 
     public virtual List<UserCategoryEntity> UserCategories { get; set; } = new();
