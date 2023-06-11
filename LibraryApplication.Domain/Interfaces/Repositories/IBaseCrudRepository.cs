@@ -4,7 +4,7 @@ namespace LibraryApplication.Data.Interfaces.Repositories;
 
 public interface IBaseCrudRepository<T> where T:IEntityBase
 {
-    Task<IEnumerable<T>> GetAll();
+    Task<List<T>> GetAll();
 
     Task<int> Create(T entity);
 

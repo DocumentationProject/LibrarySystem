@@ -10,9 +10,9 @@ public interface IBookRepository : IBaseCrudRepository<BookEntity>
 
     Task<int> CreateBookTransfer(int bookId, int userId, bool isBorrowed, int discountId, int rentTimeInDays);
 
-    Task<IEnumerable<BookEntity>> GetAllBorrowedBooks();
+    Task<List<BookEntity>> GetAllBorrowedBooks();
     
-    Task<IEnumerable<BookEntity>> GetAllAvailableBooks();
+    Task<List<BookEntity>> GetAllAvailableBooks();
     
-    Task<IEnumerable<BookEntity>> GetBorrowedBooksByUser(int userId);
+    Task<List<BookEntity>> GetBorrowedBooksByUser(int userId);
 }
