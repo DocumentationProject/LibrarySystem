@@ -1,4 +1,4 @@
-﻿namespace LibraryApplication.Service.Interfaces;
+﻿namespace LibraryApplication.Data.Interfaces.Services;
 
 public interface IBaseCrudService<T>
 {

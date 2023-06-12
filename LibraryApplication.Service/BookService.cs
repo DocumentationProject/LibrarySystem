@@ -1,6 +1,6 @@
 ﻿using LibraryApplication.Data.Database.Entities;
 using LibraryApplication.Data.Interfaces.Repositories;
-using LibraryApplication.Service.Interfaces;
+using LibraryApplication.Data.Interfaces.Services;
 
 namespace LibraryApplication.Service;
 
@@ -19,29 +19,39 @@ public class BookService : IBookService
         _fineRepository = fineRepository;
     }
 
-    public async Task<List<BookEntity>> GetAll()
+    public Task<List<BookEntity>> GetAll()
     {
-        return await _bookRepository.GetAll();
+        return _bookRepository.GetAll();
     }
 
-    public async Task<int> Create(BookEntity entity)
+    public Task<int> Create(BookEntity entity)
     {
-        return await _bookRepository.Create(entity);
+        return _bookRepository.Create(entity);
     }
 
-    public async Task<BookEntity> GetById(int id)
+    public Task<BookEntity> GetById(int id)
     {
-        return await _bookRepository.GetById(id);
+        return _bookRepository.GetById(id);
     }
 
-    public async Task<bool> Update(int id, BookEntity entity)
+    public Task<bool> Update(int id, BookEntity entity)
     {
-        return await _bookRepository.Update(id, entity);
+        return _bookRepository.Update(id, entity);
     }
 
-    public async Task<bool> Delete(int id)
+    public Task<bool> Delete(int id)
     {
-        return await _bookRepository.Delete(id);
+        return _bookRepository.Delete(id);
+    }
+
+    public Task<List<BookEntity>> GetBorrowedBooks(int userId)
+    {
+        return _bookRepository.GetBorrowedBooksByUser(userId);
+    }
+
+    public Task<List<BookEntity>> GetAllAvailableBooks()
+    {
+        return _bookRepository.GetAllAvailableBooks();
     }
 
     public async Task<bool> TryBorrowBook(int bookId, int userId, int discountId, int rentTimeInDays)
@@ -62,12 +72,9 @@ public class BookService : IBookService
             return false;
         }
 
-        userEntity.Balance -= totalRentPrice;
-        bookEntity.IsAvailable = false;
-
         await _bookRepository.CreateBookTransfer(bookId, userId, true, discountId, rentTimeInDays);
-        await _bookRepository.Update(bookId, bookEntity);
-        await _userRepository.Update(userId, userEntity);
+        await _bookRepository.MarkBookAsBorrowed(bookId);
+        await _userRepository.UpdateUserBalance(userId, userEntity.Balance - totalRentPrice);
         return true;
     }
 
@@ -75,7 +82,7 @@ public class BookService : IBookService
     {
         var userEntity = await _userRepository.GetById(userId);
         var bookEntity = await _bookRepository.GetById(bookId);
-        
+
         if (userEntity is null || bookEntity is null || bookEntity.IsAvailable)
         {
             return false;
@@ -95,15 +102,9 @@ public class BookService : IBookService
             return false;
         }
 
-        bookEntity.IsAvailable = true;
         await _bookRepository.CreateBookTransfer(bookId, userId, true, -1, -1);
-        await _bookRepository.Update(bookId, bookEntity);
+        await _bookRepository.MarkBookAsAvailable(bookId);
         await _userRepository.Update(userId, userEntity);
         return true;
-    }
-
-    public async Task<IEnumerable<BookEntity>> GetBorrowedBooks(int userId)
-    {
-        return await _bookRepository.GetBorrowedBooksByUser(userId);
     }
 }

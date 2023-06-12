@@ -1,6 +1,6 @@
 ﻿using LibraryApplication.Data.Database.Entities;
 using LibraryApplication.Data.Interfaces.Repositories;
-using LibraryApplication.Service.Interfaces;
+using LibraryApplication.Data.Interfaces.Services;
 
 namespace LibraryApplication.Service;
 
@@ -17,34 +17,34 @@ public class UserService : IUserService
         _fineRepository = fineRepository;
     }
 
-    public async Task<List<UserEntity>> GetAll()
+    public Task<List<UserEntity>> GetAll()
     {
-        return await _userRepository.GetAll();
+        return _userRepository.GetAll();
     }
 
-    public async Task<int> Create(UserEntity entity)
+    public Task<int> Create(UserEntity entity)
     {
-        return await _userRepository.Create(entity);
+        return _userRepository.Create(entity);
     }
 
-    public async Task<UserEntity> GetById(int id)
+    public Task<UserEntity> GetById(int id)
     {
-        return await _userRepository.GetById(id);
+        return _userRepository.GetById(id);
     }
 
-    public async Task<bool> Update(int id, UserEntity entity)
+    public Task<bool> Update(int id, UserEntity entity)
     {
-        return await _userRepository.Update(id, entity);
+        return _userRepository.Update(id, entity);
     }
 
-    public async Task<bool> Delete(int id)
+    public Task<bool> Delete(int id)
     {
-        return await _userRepository.Delete(id);
+        return _userRepository.Delete(id);
     }
 
-    public async Task<IEnumerable<UserBalanceTransferEntity>> GetReportByUserId(int userId)
+    public Task<List<UserBalanceTransferEntity>> GetReportByUserId(int userId)
     {
-        return await _userRepository.GetUserBalanceHistory(userId);
+        return _userRepository.GetUserBalanceHistory(userId);
     }
 
     public async Task<double?> GetUserBalance(int userId)
@@ -52,33 +52,31 @@ public class UserService : IUserService
         return (await _userRepository.GetById(userId))?.Balance;
     }
 
-    public async Task<IEnumerable<UserBalanceTransferEntity>> GetUserBalanceHistory(int userId)
+    public Task<List<UserBalanceTransferEntity>> GetUserBalanceHistory(int userId)
     {
-        return await _userRepository.GetUserBalanceHistory(userId);
+        return _userRepository.GetUserBalanceHistory(userId);
     }
 
-    public async Task<int> Authenticate(string userInput, string passwordInput)
+    public Task<int> Authenticate(string userInput, string passwordInput)
     {
-        var user = (await GetAll()).FirstOrDefault(x => x.Login == userInput && x.Password == passwordInput);
+        return _userRepository.CheckIfExistingUser(userInput, passwordInput);
+    }
 
-        if (user is null)
-        {
-            return -1;
-        }
-
-        return user.Id;
+    public async Task<bool> HasFines(int userId)
+    {
+        return (await _fineRepository.GetFinesByUserId(userId)).Any();
     }
 
     public async Task ProcessAccountTopUp(int userId, double amount)
     {
         var userEntity = await _userRepository.GetById(userId);
+
         if (userEntity is null)
         {
             return;
         }
 
-        userEntity.Balance += amount;
-        await _userRepository.Update(userId, userEntity);
+        await _userRepository.UpdateUserBalance(userId, userEntity.Balance + amount);
     }
 
     public async Task<bool> TryProcessFinePayment(int userId, int bookId)
@@ -97,14 +95,8 @@ public class UserService : IUserService
             return false;
         }
 
-        userEntity.Balance -= fineEntity.Amount;
-        await _userRepository.Update(userId, userEntity);
+        await _userRepository.UpdateUserBalance(userId, userEntity.Balance - fineEntity.Amount);
         await _fineRepository.Delete(fineEntity.Id);
         return true;
-    }
-
-    public async Task<bool> HasFines(int userId)
-    {
-        return (await _fineRepository.GetFinesByUserId(userId)).Any();
     }
 }

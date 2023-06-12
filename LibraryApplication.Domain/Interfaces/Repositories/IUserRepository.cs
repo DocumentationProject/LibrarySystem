@@ -8,5 +8,5 @@ public interface IUserRepository : IBaseCrudRepository<UserEntity>
 
     Task<List<UserBalanceTransferEntity>> GetUserBalanceHistory(int id);
 
-    Task<bool> CheckIfExistingUser(string login, string password);
+    Task<int> CheckIfExistingUser(string login, string password);
 }

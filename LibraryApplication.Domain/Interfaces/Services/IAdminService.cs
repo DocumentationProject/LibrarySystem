@@ -1,4 +1,4 @@
-﻿namespace LibraryApplication.Service;
+﻿namespace LibraryApplication.Data.Interfaces.Services;
 
 public interface IAdminService
 {
