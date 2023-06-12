@@ -4,5 +4,5 @@ namespace LibraryApplication.Data.Interfaces.Repositories;
 
 public interface IFineRepository : IBaseCrudRepository<FineEntity>
 {
-    IEnumerable<FineEntity> GetFinesByUserId(int userId);
+    Task<List<FineEntity>> GetFinesByUserId(int userId);
 }

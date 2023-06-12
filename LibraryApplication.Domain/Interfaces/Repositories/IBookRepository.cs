@@ -4,15 +4,15 @@ namespace LibraryApplication.Data.Interfaces.Repositories;
 
 public interface IBookRepository : IBaseCrudRepository<BookEntity>
 {
-    void MarkBookAsBorrowed(int id);
+    Task<bool> MarkBookAsBorrowed(int id);
     
-    void MarkBookAsAvailable(int id);
+    Task<bool> MarkBookAsAvailable(int id);
 
-    int CreateBookTransfer(int bookId, int userId, bool isBorrowed, int discountId, int rentTimeInDays);
+    Task<int> CreateBookTransfer(int bookId, int userId, bool isBorrowed, int discountId, int rentTimeInDays);
 
-    IEnumerable<BookEntity> GetAllBorrowedBooks();
+    Task<List<BookEntity>> GetAllBorrowedBooks();
     
-    IEnumerable<BookEntity> GetAllAvailableBooks();
+    Task<List<BookEntity>> GetAllAvailableBooks();
     
-    IEnumerable<BookEntity> GetBorrowedBooksByUser(int userId);
+    Task<List<BookEntity>> GetBorrowedBooksByUser(int userId);
 }

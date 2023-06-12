@@ -4,9 +4,9 @@ namespace LibraryApplication.Data.Interfaces.Repositories;
 
 public interface IUserRepository : IBaseCrudRepository<UserEntity>
 {
-    double GetUserBalance(int id);
+    Task<double> UpdateUserBalance(int id, double amount);
 
-    IEnumerable<UserBalanceTransferEntity> GetUserBalanceHistory(int id);
+    Task<List<UserBalanceTransferEntity>> GetUserBalanceHistory(int id);
 
-    bool CheckIfExistingUser(string login, string password);
+    Task<bool> CheckIfExistingUser(string login, string password);
 }
