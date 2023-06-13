@@ -26,7 +26,5 @@ public class UserEntity : IEntityBase
 
     public virtual List<FineEntity> Fines { get; set; }
 
-    public virtual UserBalanceEntity UserBalanceEntity { get; set; }
-
     public virtual List<UserBalanceTransferEntity> UserBalanceTransfers { get; set; }
 }

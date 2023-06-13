@@ -28,8 +28,6 @@ public sealed class LibraryApplicationDbContext: DbContext
 
     public DbSet<UserEntity> Users => Set<UserEntity>();
 
-    public DbSet<UserBalanceEntity> UserBalances => Set<UserBalanceEntity>();
-
     public DbSet<UserBalanceTransferEntity> UserBalanceTransfers => Set<UserBalanceTransferEntity>();
 
     public DbSet<UserCategoryEntity> UserCategories => Set<UserCategoryEntity>();
@@ -67,11 +65,6 @@ public sealed class LibraryApplicationDbContext: DbContext
             .WithMany(x => x.Fines)
             .HasForeignKey(x => x.BookTransferId);
 
-        modelBuilder.Entity<UserBalanceEntity>()
-            .HasOne(x => x.UserEntity)
-            .WithOne(x => x.UserBalanceEntity)
-            .HasForeignKey<UserEntity>(x => x.Id);
-
         modelBuilder.Entity<UserEntity>()
             .HasMany(x => x.UserCategories)
             .WithMany(x => x.Users);
@@ -90,5 +83,10 @@ public sealed class LibraryApplicationDbContext: DbContext
             .HasOne(x => x.TransferType)
             .WithMany(x => x.BudgetTransfers)
             .HasForeignKey(x => x.TransferTypeId);
+
+        modelBuilder.Entity<DiscountEntity>()
+            .HasOne(x => x.UserCategory)
+            .WithOne(x => x.Discount)
+            .HasForeignKey<UserCategoryEntity>(x => x.Id);
     }
 }

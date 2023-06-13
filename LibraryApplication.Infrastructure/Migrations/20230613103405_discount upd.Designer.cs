@@ -4,6 +4,7 @@ using LibraryApplication.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LibraryApplication.Infrastructure.Migrations
 {
     [DbContext(typeof(LibraryApplicationDbContext))]
-    partial class LibraryApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230613103405_discount upd")]
+    partial class discountupd
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

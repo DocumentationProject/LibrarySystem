@@ -16,9 +16,9 @@ public class BookTransferEntity : IEntityBase
 
     public DateTime TransferDate { get; set; }
 
-    public int DiscountId { get; set; }
+    public int? DiscountId { get; set; }
 
-    public DateTime ExpectedReturnDate { get; set; }
+    public DateTime? ExpectedReturnDate { get; set; }
 
     public virtual BookEntity BookEntity { get; set; }
 
