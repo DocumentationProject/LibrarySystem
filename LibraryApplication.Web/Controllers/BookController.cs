@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using LibraryApplication.Data.Interfaces.Repositories;
+﻿using LibraryApplication.Attributes;
 using LibraryApplication.Data.Interfaces.Services;
 using LibraryApplication.Data.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -10,35 +9,60 @@ namespace LibraryApplication.Controllers;
 [Route("api/[controller]")]
 public class BookController : ControllerBase
 {
-    private readonly IBookRepository bookRepository;
     private readonly IBookService bookService;
-    private readonly IMapper mapper;
 
-    public BookController(IBookRepository bookRepository, IBookService bookService, IMapper mapper)
+    public BookController(IBookService bookService)
     {
-        this.bookRepository = bookRepository;
         this.bookService = bookService;
-        this.mapper = mapper;
     }
 
     [HttpGet("all")]
     [ProducesResponseType(typeof(List<BookModel>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAll()
     {
-        var users = await this.bookRepository.GetAll();
-        return Ok(this.mapper.Map<List<BookModel>>(users));
+        return Ok(await this.bookService.GetAll());
     }
 
     [HttpGet("{id:int}")]
+    [ExistingBook]
     [ProducesResponseType(typeof(BookModel), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetById(int id)
     {
-        var user = await this.bookRepository.GetById(id);
-        return user is null ? StatusCode(StatusCodes.Status404NotFound) : Ok(this.mapper.Map<BookModel>(user));
+        return Ok(await this.bookService.GetById(id));
+    }
+
+    [HttpPost("create")]
+    [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Create([FromForm] BookModel bookModel)
+    {
+        var id = await this.bookService.Create(bookModel);
+        return Ok(id);
+    }
+
+    [HttpPut("{id:int}/edit")]
+    [ExistingBook]
+    [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Create(int id, [FromForm] BookModel bookModel)
+    {
+        var updated = await this.bookService.Update(id, bookModel);
+        return Ok(updated);
+    }
+    
+    [HttpDelete("{id:int}/delete")]
+    [ExistingBook]
+    [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var deleted = await this.bookService.Delete(id);
+        return Ok(deleted);
     }
 
     [HttpPost("{id:int}/borrow")]
+    [ExistingBook]
     [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> BorrowBook([FromBody] int id, int userId, int? discountId, int rentInDays)
@@ -47,6 +71,7 @@ public class BookController : ControllerBase
     }
     
     [HttpPost("{id:int}/return")]
+    [ExistingBook]
     [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> ReturnBook([FromBody] int id, int userId)

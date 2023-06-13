@@ -12,6 +12,8 @@ public interface IBookRepository : IBaseCrudRepository<BookEntity>
 
     Task<List<BookEntity>> GetAllBorrowedBooks();
     
+    bool CheckIfBookExists(int id);
+    
     Task<List<BookEntity>> GetAllAvailableBooks();
     
     Task<List<BookEntity>> GetBorrowedBooksByUser(int userId);

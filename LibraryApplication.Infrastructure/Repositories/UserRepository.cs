@@ -49,8 +49,8 @@ public class UserRepository : BaseCrudRepository<UserEntity>, IUserRepository
         return user?.Id;
     }
 
-    public Task<bool> CheckIfUserExists(int id)
+    public bool CheckIfUserExists(int id)
     {
-        return this.DbContext.Users.AnyAsync(x => x.Id == id);
+        return this.DbContext.Users.Any(x => x.Id == id);
     }
 }

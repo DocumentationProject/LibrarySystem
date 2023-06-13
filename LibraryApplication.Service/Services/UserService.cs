@@ -1,23 +1,24 @@
 ﻿using AutoMapper;
+using LibraryApplication.Data.Database.Entities;
 using LibraryApplication.Data.Interfaces.Repositories;
 using LibraryApplication.Data.Interfaces.Services;
+using LibraryApplication.Data.Models;
 
 namespace LibraryApplication.Service.Services;
 
-public class UserService : IUserService
+public class UserService : BaseCrudService<UserModel, UserEntity>, IUserService
 {
     private readonly IUserRepository userRepository;
     private readonly IFineRepository fineRepository;
-    private readonly IMapper mapper;
 
     public UserService(
         IUserRepository userRepository,
         IFineRepository fineRepository, 
-        IMapper mapper)
+        IMapper mapper) 
+        : base(userRepository, mapper)
     {
         this.userRepository = userRepository;
         this.fineRepository = fineRepository;
-        this.mapper = mapper;
     }
 
     public Task<int?> Authenticate(string userInput, string passwordInput)

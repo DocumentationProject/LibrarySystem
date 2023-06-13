@@ -64,6 +64,11 @@ public class BookRepository : BaseCrudRepository<BookEntity>, IBookRepository
             .ToListAsync();
     }
 
+    public bool CheckIfBookExists(int id)
+    {
+        return this.DbContext.Books.Any(x => x.Id == id);
+    }
+
     private async Task<bool> ChangeBookAvailabilityStatus(int bookId, bool isAvailable)
     {
         var book = await GetById(bookId);

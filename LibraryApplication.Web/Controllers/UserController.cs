@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using LibraryApplication.Data.Interfaces.Repositories;
+﻿using LibraryApplication.Attributes;
 using LibraryApplication.Data.Interfaces.Services;
 using LibraryApplication.Data.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -11,14 +10,10 @@ namespace LibraryApplication.Controllers;
 public class UserController : ControllerBase
 {
     private readonly IUserService userService;
-    private readonly IUserRepository userRepository;
-    private readonly IMapper mapper;
 
-    public UserController(IUserService userService, IUserRepository userRepository, IMapper mapper)
+    public UserController(IUserService userService)
     {
         this.userService = userService;
-        this.userRepository = userRepository;
-        this.mapper = mapper;
     }
 
     [HttpPost]
@@ -34,20 +29,49 @@ public class UserController : ControllerBase
     [ProducesResponseType(typeof(List<UserModel>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAll()
     {
-        var users = await this.userRepository.GetAll();
-        return Ok(this.mapper.Map<List<UserModel>>(users));
+        return Ok(await this.userService.GetAll());
     }
 
     [HttpGet("{id:int}")]
+    [ExistingUser]
     [ProducesResponseType(typeof(UserModel), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetById(int id)
     {
-        var user = await this.userRepository.GetById(id);
-        return user is null ? StatusCode(StatusCodes.Status404NotFound) : Ok(this.mapper.Map<UserModel>(user));
+        return Ok(await this.userService.GetById(id));
+    }
+
+    [HttpPost("create")]
+    [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Create([FromBody] UserModel userModel)
+    {
+        var id = await this.userService.Create(userModel);
+        return Ok(id);
+    }
+
+    [HttpPut("{id:int}/edit")]
+    [ExistingUser]
+    [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Create(int id, [FromForm] UserModel userModel)
+    {
+        var updated = await this.userService.Update(id, userModel);
+        return Ok(updated);
+    }
+    
+    [HttpDelete("{id:int}/delete")]
+    [ExistingUser]
+    [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var deleted = await this.userService.Delete(id);
+        return Ok(deleted);
     }
 
     [HttpGet("{id:int}/fines")]
+    [ExistingUser]
     [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CheckIfUserHasFines(int id)
@@ -56,6 +80,7 @@ public class UserController : ControllerBase
     }
     
     [HttpPost("process-fine")]
+    [ExistingUser]
     [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> ProcessUserFine([FromBody] int userId, int bookId)

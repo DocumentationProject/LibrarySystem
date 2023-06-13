@@ -1,6 +1,8 @@
-﻿namespace LibraryApplication.Data.Interfaces.Services;
+﻿using LibraryApplication.Data.Models;
 
-public interface IUserService
+namespace LibraryApplication.Data.Interfaces.Services;
+
+public interface IUserService : IBaseCrudService<UserModel>
 {
     Task<int?> Authenticate(string userInput, string passwordInput);
     Task<bool> TryProcessFinePayment(int userId, int bookId);

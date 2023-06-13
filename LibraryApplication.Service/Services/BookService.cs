@@ -2,24 +2,29 @@
 using LibraryApplication.Data.Database.Entities;
 using LibraryApplication.Data.Interfaces.Repositories;
 using LibraryApplication.Data.Interfaces.Services;
+using LibraryApplication.Data.Models;
 
 namespace LibraryApplication.Service.Services;
 
-public class BookService : IBookService
+public class BookService : BaseCrudService<BookModel, BookEntity>, IBookService
 {
     private readonly IBookRepository bookRepository;
     private readonly IDiscountRepository discountRepository;
     private readonly IUserRepository userRepository;
     private readonly IFineRepository fineRepository;
-    private readonly IMapper mapper;
 
-    public BookService(IBookRepository bookRepository, IDiscountRepository discountRepository, IUserRepository userRepository, IFineRepository fineRepository, IMapper mapper)
+    public BookService(
+        IBookRepository bookRepository, 
+        IDiscountRepository discountRepository, 
+        IUserRepository userRepository, 
+        IFineRepository fineRepository, 
+        IMapper mapper) 
+        : base(bookRepository, mapper)
     {
         this.bookRepository = bookRepository;
         this.discountRepository = discountRepository;
         this.userRepository = userRepository;
         this.fineRepository = fineRepository;
-        this.mapper = mapper;
     }
 
     public async Task<bool> TryBorrowBook(int bookId, int userId, int? discountId, int rentTimeInDays)
