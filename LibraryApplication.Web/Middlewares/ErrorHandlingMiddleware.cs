@@ -23,7 +23,7 @@ public class ErrorHandlingMiddleware
         }
     }
 
-    private async Task HandleExceptionAsync(HttpContext context, Exception exception)
+    private static async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
@@ -31,7 +31,7 @@ public class ErrorHandlingMiddleware
         await context.Response.WriteAsync(new
         {
             StatusCode = context.Response.StatusCode,
-            Message = "Internal Server Error from the custom middleware." + exception.Message
+            Message = "Internal Server Error from the custom middleware." + exception.Message + exception.InnerException?.Message
         }.ToString() ?? string.Empty);
     }
 }
