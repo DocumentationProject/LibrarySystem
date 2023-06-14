@@ -1,5 +1,5 @@
 import React, {createContext, useState} from 'react';
-import { Route, Switch } from 'react-router';
+import { Switch } from 'react-router';
 import Layout from './components/layout/Layout';
 
 import './custom.css'
@@ -8,6 +8,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import AuthorizedRoute from "./components/AuthorizedRoute";
 import UnauthorizedRoute from "./components/UnauthorizedRoute";
+import ProfilePage from "./pages/profile/ProfilePage";
 
 export const AuthContext = createContext({
     user: null,
@@ -22,6 +23,7 @@ const App = () => {
             <Layout>
                 <Switch>
                     <AuthorizedRoute exact path='/catalog' component={CatalogPage} />
+                    <AuthorizedRoute exact path='/profile' component={ProfilePage} />
                     <UnauthorizedRoute exact path='/login' component={LoginPage} />
                     <UnauthorizedRoute exact path='/register' component={RegisterPage} />
                 </Switch>
