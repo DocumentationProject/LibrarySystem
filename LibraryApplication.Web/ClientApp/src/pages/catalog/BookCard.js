@@ -5,11 +5,13 @@ import {useUser} from "../../hooks/useUser";
 import BorrowBookModal from "./BorrowBookModal";
 import {API} from "../../configs/axios.config";
 import Paragraph from "antd/es/typography/Paragraph";
+import EditBookModal from "./EditBookModal";
 
 const BookCard = ({book, setBooks, authors, genres}) => {
     const { user } = useUser();
 
     const [showBorrowBookModal, setShowBorrowBookModal] = useState(false)
+    const [showEditBookModal, setShowEditBookModal] = useState(false)
 
     const handleDeleteBook = async () => {
         try {
@@ -24,7 +26,7 @@ const BookCard = ({book, setBooks, authors, genres}) => {
     const cardActions = [<Button type='text' onClick={() => setShowBorrowBookModal(true)} icon={<BookOutlined key="borrow"  />} disabled={!book.isAvailable}/>]
     if (user.isAdmin) {
         cardActions.unshift(<Button type='text' onClick={handleDeleteBook} icon={<DeleteOutlined key="delete"  />}/>)
-        cardActions.unshift(<Button type='text' icon={<EditOutlined key="edit" />}/>)
+        cardActions.unshift(<Button type='text' onClick={() => setShowEditBookModal(true)} icon={<EditOutlined key="edit" />}/>)
     }
 
     const author = authors.find(author => author.id === book.authorId)
@@ -36,6 +38,7 @@ const BookCard = ({book, setBooks, authors, genres}) => {
             actions={cardActions}
         >
             {showBorrowBookModal && <BorrowBookModal book={book} setShowModal={setShowBorrowBookModal}/>}
+            {showEditBookModal && <EditBookModal book={book} setShowModal={setShowEditBookModal} setBooks={setBooks}/>}
             <Paragraph>Author: {author?.name + " " + author?.surname}</Paragraph>
             <Paragraph>Genre: {genre?.name}</Paragraph>
             <Statistic

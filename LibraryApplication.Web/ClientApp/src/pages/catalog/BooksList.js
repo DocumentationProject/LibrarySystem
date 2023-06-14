@@ -59,7 +59,7 @@ const BooksList = () => {
                 dataSource={books}
                 renderItem={(book) => (
                     <List.Item>
-                        <BookCard book={book} authors={authors} genres={genres}/>
+                        <BookCard book={book} authors={authors} genres={genres} setBooks={setBooks}/>
                     </List.Item>
                 )}
             />
