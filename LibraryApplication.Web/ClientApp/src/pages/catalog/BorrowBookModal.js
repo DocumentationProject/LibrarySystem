@@ -2,17 +2,19 @@ import React from 'react';
 import {Button, Form, InputNumber, Modal, notification} from "antd";
 import {API} from "../../configs/axios.config";
 import {useUser} from "../../hooks/useUser";
+import {useAuth} from "../../hooks/useAuth";
 
 const BorrowBookModal = ({book, setShowModal}) => {
     const { user } = useUser();
-
+    const { login } = useAuth();
     const onFinish = async (values) => {
         try {
-             await API.post(`/api/Book/${book.id}/borrow`, {}, {
-                params: {
+             await API.post(`/api/Book/${book.id}/borrow`, {
                     userId: user.id,
                     rentInDays: values.rentInDays
-                }})
+                })
+            const {data: newUser} = await API.get(`/api/User/${user.id}`)
+            login(newUser)
             notification.success({message: 'Book borrowed!'})
             setShowModal(false)
 

@@ -70,22 +70,12 @@ const RentedBooks = () => {
             key: 'rentPrice',
         },
         {
-            title: 'Rented on',
-            dataIndex: 'rentedOn',
-            key: 'rentedOn',
-        },
-        {
-            title: 'Rented due',
-            dataIndex: 'rentedDue',
-            key: 'rentedDue',
-        },
-        {
             title: 'Overdue',
             key: 'overdue',
             dataIndex: 'overdue',
             width: '96px',
             render: overdue => (
-                <Tag icon={overdue ? <CloseCircleOutlined /> : <CheckCircleOutlined />} color={overdue ? 'success' : 'error'}>
+                <Tag icon={overdue ? <CloseCircleOutlined /> : <CheckCircleOutlined />} color={overdue ? 'error' : 'success'}>
                     {overdue ? 'OVERDUE' : 'ON TIME'}
                 </Tag>
             )
@@ -98,9 +88,7 @@ const RentedBooks = () => {
             render: book => {
                 const handleReturnBook = async () => {
                     try {
-                        await API.post(`/api/Book/${book.id}/return`, {
-                            userId: user.id
-                        })
+                        await API.post(`/api/Book/${book.key}/return`, {}, {params: {userId: user.id}})
                         notification.success({message: 'Book returned!'})
 
                     } catch (error) {
@@ -122,15 +110,14 @@ const RentedBooks = () => {
     const data = books.map(book => {
         const author = authors.find(author => author.id === book.authorId)
         const genre = genres.find(genre => genre.id === book.genreId)
+        console.log(genre)
 
         return {
         key: book.id,
         name: book.name,
         author: author?.name + ' ' + author?.surname,
-        genre: genre,
+        genre: genre.name,
         rentPrice: book.rentPrice,
-        rentedOn: book.rentedOn,
-        rentedDue: book.rentedDue,
         overdue: book.overdue,
     }})
 
