@@ -3,6 +3,7 @@ import {Menu, Layout as AntdLayout, theme, Dropdown, Button, Statistic, Space} f
 import {useAuth} from "../../hooks/useAuth";
 import {useUser} from "../../hooks/useUser";
 import {DollarOutlined} from "@ant-design/icons";
+import {useHistory} from "react-router-dom";
 
 const { Header, Content, Footer } = AntdLayout;
 
@@ -16,13 +17,9 @@ const Layout = ({children}) =>  {
   } = theme.useToken();
     const { logout } = useAuth();
     const { user } = useUser();
+    const history = useHistory();
 
     const userMenuItems = [
-        {
-            key: 'my-profile',
-            label: 'My profile',
-            //onClick: handleManageUsersClick
-        },
         {
             key: 'logout',
             label: 'Logout',
@@ -31,7 +28,8 @@ const Layout = ({children}) =>  {
     ]
 
     const navMenuItems = [
-        {key: "catalog", label: "Catalog"}
+        {key: "catalog", label: "Catalog", onClick: () => history.push('/catalog')},
+        {key: "profile", label: "Profile", onClick: () => history.push('/profile')},
     ]
 
   return (
@@ -48,6 +46,7 @@ const Layout = ({children}) =>  {
                   theme="light"
                   mode="horizontal"
                   items={navMenuItems}
+                  style={{width: 240}}
               />
               <Space size={16}>
                 <Statistic title="Balance" value={user?.rentPrice} prefix='$' />
