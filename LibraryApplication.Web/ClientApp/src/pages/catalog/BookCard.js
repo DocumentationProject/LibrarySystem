@@ -6,7 +6,7 @@ import BorrowBookModal from "./BorrowBookModal";
 import {API} from "../../configs/axios.config";
 import Paragraph from "antd/es/typography/Paragraph";
 
-const BookCard = ({book, setBooks}) => {
+const BookCard = ({book, setBooks, authors, genres}) => {
     const { user } = useUser();
 
     const [showBorrowBookModal, setShowBorrowBookModal] = useState(false)
@@ -27,14 +27,17 @@ const BookCard = ({book, setBooks}) => {
         cardActions.unshift(<Button type='text' icon={<EditOutlined key="edit" />}/>)
     }
 
+    const author = authors.find(author => author.id === book.authorId)
+    const genre = genres.find(genre => genre.id === book.genreId)
+
     return (
         <Card
             title={book.name}
             actions={cardActions}
         >
             {showBorrowBookModal && <BorrowBookModal book={book} setShowModal={setShowBorrowBookModal}/>}
-            <Paragraph>Author: {book.authorId}</Paragraph>
-            <Paragraph>Genre: {book.genreId}</Paragraph>
+            <Paragraph>Author: {author?.name + " " + author?.surname}</Paragraph>
+            <Paragraph>Genre: {genre?.name}</Paragraph>
             <Statistic
                 title="Rent price"
                 value={book.rentPrice}
