@@ -67,7 +67,7 @@ public class BookController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> BorrowBook(int id, [FromBody] BorrowBookModel borrowBookModel)
     {
-        return Ok(await this.bookService.TryBorrowBook(id, borrowBookModel.UserId, borrowBookModel.DiscountId, borrowBookModel.RentInDays));
+        return Ok(await this.bookService.TryBorrowBook(id, borrowBookModel.UserId, borrowBookModel.RentInDays));
     }
     
     [HttpPost("{id:int}/return")]

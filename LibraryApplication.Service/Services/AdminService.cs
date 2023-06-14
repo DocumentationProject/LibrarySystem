@@ -54,16 +54,9 @@ public class AdminService : IAdminService
         return true;
     }
 
-    public async Task<bool> AddDiscount(int userCategoryId, int discountTypeId)
+    public Task<int> AddDiscount(int userCategoryId, int amount)
     {
-        var discountEntity = await discountRepository.GetById(discountTypeId);
-
-        if (discountEntity is null)
-        {
-            return false;
-        }
-
-        return await discountRepository.CreateDiscountByUserType(discountEntity.Amount, userCategoryId) != -1;
+        return discountRepository.CreateDiscountByUserType(amount, userCategoryId);
     }
 
     private async Task CreateOrUpdateFine(int amount, List<FineEntity> finesByUserId, BookTransferEntity bookTransferEntity)

@@ -8,7 +8,7 @@ public interface IBookRepository : IBaseCrudRepository<BookEntity>
     
     Task<bool> MarkBookAsAvailable(int id);
 
-    Task<int> CreateBookTransfer(int bookId, int userId, bool isBorrowed, int? discountId, int? rentTimeInDays);
+    Task<int> CreateBookTransfer(int bookId, int userId, bool isBorrowed, int? rentTimeInDays);
 
     Task<List<BookEntity>> GetAllBorrowedBooks();
     
