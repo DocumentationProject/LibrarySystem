@@ -1,6 +1,7 @@
 import React from 'react';
 import {Menu, Layout as AntdLayout, theme, Dropdown, Button} from "antd";
 import {useAuth} from "../../hooks/useAuth";
+import {useUser} from "../../hooks/useUser";
 
 const { Header, Content, Footer } = AntdLayout;
 
@@ -13,7 +14,7 @@ const Layout = ({children}) =>  {
       token: { colorBgLayout },
   } = theme.useToken();
     const { logout } = useAuth();
-
+    const { user } = useUser();
 
     const userMenuItems = [
         {
@@ -52,7 +53,7 @@ const Layout = ({children}) =>  {
                   overlayStyle={{minWidth: 180}}
               >
                   <Button type="text" size='large'>
-                      <UserOutlined /> Nazar
+                      <UserOutlined /> {user?.name}
                   </Button>
               </Dropdown>
           </Header>
