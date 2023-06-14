@@ -18,6 +18,7 @@ public class UserRepository : BaseCrudRepository<UserEntity>, IUserRepository
         entityToUpdate.Login = passedEntity.Login;
         entityToUpdate.Password = passedEntity.Password;
         entityToUpdate.UserCategories = passedEntity.UserCategories;
+        entityToUpdate.Balance = passedEntity.Balance;
     }
 
     public async Task<double?> UpdateUserBalance(int id, double amountToAdd)

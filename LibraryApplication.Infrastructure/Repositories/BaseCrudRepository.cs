@@ -46,7 +46,7 @@ public abstract class BaseCrudRepository<T> : IBaseCrudRepository<T>
         var updated = this.DbContext.Set<T>().Update(entityToUpdate);
         await this.DbContext.SaveChangesAsync();
 
-        return updated.State == EntityState.Modified;
+        return true;
     }
 
     public virtual async Task<bool> Delete(int id)
@@ -61,7 +61,7 @@ public abstract class BaseCrudRepository<T> : IBaseCrudRepository<T>
         var deleted = this.DbContext.Remove(entityToDelete);
         await this.DbContext.SaveChangesAsync();
 
-        return deleted.State == EntityState.Deleted;
+        return true;
     }
 
     protected abstract void UpdateProps(T entityToUpdate, T passedEntity);
