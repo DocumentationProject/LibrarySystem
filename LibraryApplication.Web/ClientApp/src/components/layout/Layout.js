@@ -1,9 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Menu, Layout as AntdLayout, theme, Dropdown, Button, Statistic, Space} from "antd";
 import {useAuth} from "../../hooks/useAuth";
 import {useUser} from "../../hooks/useUser";
-import {DollarOutlined} from "@ant-design/icons";
 import {useHistory} from "react-router-dom";
+import TopUpModal from "../TopUpModal";
 
 const { Header, Content, Footer } = AntdLayout;
 
@@ -18,6 +18,8 @@ const Layout = ({children}) =>  {
     const { logout } = useAuth();
     const { user } = useUser();
     const history = useHistory();
+
+    const [showTopUpModal, setShowTopUpModal] = useState(false)
 
     const userMenuItems = [
         {
@@ -34,7 +36,7 @@ const Layout = ({children}) =>  {
 
   return (
       <AntdLayout theme="light" style={{ minHeight: '100vh' }}>
-          <Header
+          {user ? <Header
               className='d-flex-space-between'
               style={{
                   backgroundColor: '#fff',
@@ -49,7 +51,9 @@ const Layout = ({children}) =>  {
                   style={{width: 240}}
               />
               <Space size={16}>
-                <Statistic title="Balance" value={user?.rentPrice} prefix='$' />
+                  <Button type="primary" size='large' onClick={() => setShowTopUpModal(true)}>Top up</Button>
+                  {showTopUpModal && <TopUpModal setShowModal={setShowTopUpModal} />}
+                <Statistic title="Balance" value={user?.balance} prefix='$' />
                 <Dropdown
                     menu={{items: userMenuItems}}
                     overlayStyle={{minWidth: 180}}
@@ -59,7 +63,7 @@ const Layout = ({children}) =>  {
                     </Button>
                 </Dropdown>
               </Space>
-          </Header>
+          </Header> : null}
           <Content
               style={{
                   padding: '24px 48px',
