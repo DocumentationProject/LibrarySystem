@@ -50,7 +50,7 @@ const Layout = ({children}) =>  {
                   items={navMenuItems}
               />
               <Space size={16}>
-                <Statistic title="Balance" value={user.rentPrice} prefix='$' />
+                <Statistic title="Balance" value={user?.rentPrice} prefix='$' />
                 <Dropdown
                     menu={{items: userMenuItems}}
                     overlayStyle={{minWidth: 180}}

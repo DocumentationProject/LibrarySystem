@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Divider, Form, Input, InputNumber, Modal, Select, Space, Switch} from "antd";
+import {Button, Divider, Form, Input, InputNumber, Modal, notification, Select, Space, Switch} from "antd";
 import { PlusOutlined } from '@ant-design/icons';
 import {API} from "../../configs/axios.config";
 
@@ -78,9 +78,11 @@ const AddBookModal = ({setShowModal, setBooks}) => {
             const {data: newBook} = await API.get(`/api/Book/${newBookId}`)
             setShowModal(false)
             setBooks(prevBooks => [...prevBooks, newBook])
+            notification.success({message: 'Book added!'})
         } catch (e) {
             console.log(e)
-        }    }
+        }
+    }
 
     const renderAuthorMenu = (menu) => (
         <>
