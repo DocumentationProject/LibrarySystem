@@ -15,6 +15,7 @@ builder.Services.AddDbContext<LibraryApplicationDbContext>(options =>
 });
 
 builder.Services.AddControllers();
+builder.Services.AddCors();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
@@ -60,6 +61,11 @@ if (app.Environment.IsDevelopment())
         options.RoutePrefix = "swagger";
     });
 }
+
+app.UseCors(opt => opt
+    .AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader());
 
 app.MapControllerRoute(
     name: "default",
