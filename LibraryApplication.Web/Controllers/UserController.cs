@@ -19,9 +19,9 @@ public class UserController : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> Authenticate([FromBody] string login, string password)
+    public async Task<IActionResult> Authenticate([FromBody] AuthModel authModel)
     {
-        var id = await this.userService.Authenticate(login, password);
+        var id = await this.userService.Authenticate(authModel.Login, authModel.Password);
         return id is null ? StatusCode(StatusCodes.Status401Unauthorized) : Ok(id);
     }
 
