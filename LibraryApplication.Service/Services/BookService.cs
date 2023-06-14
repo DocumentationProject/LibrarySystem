@@ -83,4 +83,16 @@ public class BookService : BaseCrudService<BookModel, BookEntity>, IBookService
         await bookRepository.MarkBookAsAvailable(bookId);
         return true;
     }
+
+    public async Task<List<BookModel>> GetAvailableBooks()
+    {
+        var books = await this.bookRepository.GetAllAvailableBooks();
+        return this.Mapper.Map<List<BookModel>>(books);
+    }
+
+    public async Task<List<BookModel>> GetBorrowedBooksByUser(int userId)
+    {
+        var books = await this.bookRepository.GetBorrowedBooksByUser(userId);
+        return this.Mapper.Map<List<BookModel>>(books);
+    }
 }

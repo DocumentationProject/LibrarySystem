@@ -31,6 +31,12 @@ public class UserService : BaseCrudService<UserModel, UserEntity>, IUserService
         return (await fineRepository.GetFinesByUserId(userId)).Any();
     }
 
+    public async Task<List<BookTransferModel>> GetUserValidTransfers(int userId)
+    {
+        var transfers = await this.userRepository.GetUserValidTransfers(userId);
+        return this.Mapper.Map<List<BookTransferModel>>(transfers);
+    }
+
     public async Task<bool> TryProcessFinePayment(int userId, int bookId)
     {
         var fineEntity = (await fineRepository.GetFinesByUserId(userId)).FirstOrDefault(x => x.BookTransferEntity.BookId == bookId);

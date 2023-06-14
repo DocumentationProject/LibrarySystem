@@ -53,4 +53,18 @@ public class UserRepository : BaseCrudRepository<UserEntity>, IUserRepository
     {
         return this.DbContext.Users.Any(x => x.Id == id);
     }
+
+    public Task<List<BookTransferEntity>> GetUserValidTransfers(int userId)
+    {
+        var allBorrowTransfers= this.DbContext.BookTransfers
+            .Where(x => x.UserId == userId && x.IsBorrowed);
+
+        var allReturnTransfers = this.DbContext.BookTransfers
+            .Where(x => x.UserId == userId && x.IsReturned);
+
+        return allBorrowTransfers
+            .Where(x => !allReturnTransfers.Any(y => x.BookId == y.BookId))
+            .ToListAsync();
+
+    }
 }
