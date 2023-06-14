@@ -7,7 +7,7 @@ public sealed class LibraryApplicationDbContext: DbContext
 {
     public LibraryApplicationDbContext(DbContextOptions<LibraryApplicationDbContext> options) : base(options)
     {
-        Database.EnsureCreated();
+        Database.Migrate();
     }
 
     public DbSet<AuthorEntity> Authors => Set<AuthorEntity>();

@@ -35,6 +35,10 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAuthorService, AuthorService>();
+builder.Services.AddScoped<IGenreService, GenreService>();
+builder.Services.AddScoped<ITransferTypeService, TransferTypeService>();
+builder.Services.AddScoped<IUserCategoryService, UserCategoryService>();
 
 var app = builder.Build();
 
