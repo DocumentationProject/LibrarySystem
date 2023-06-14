@@ -54,7 +54,7 @@ public class UserController : ControllerBase
     [ExistingUser]
     [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Create(int id, [FromForm] UserModel userModel)
+    public async Task<IActionResult> Create(int id, [FromBody] UserModel userModel)
     {
         var updated = await this.userService.Update(id, userModel);
         return Ok(updated);

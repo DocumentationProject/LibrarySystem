@@ -35,7 +35,7 @@ public class BookController : ControllerBase
     [HttpPost("create")]
     [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Create([FromForm] BookModel bookModel)
+    public async Task<IActionResult> Create([FromBody] BookModel bookModel)
     {
         var id = await this.bookService.Create(bookModel);
         return Ok(id);
@@ -45,7 +45,7 @@ public class BookController : ControllerBase
     [ExistingBook]
     [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Create(int id, [FromForm] BookModel bookModel)
+    public async Task<IActionResult> Create(int id, [FromBody] BookModel bookModel)
     {
         var updated = await this.bookService.Update(id, bookModel);
         return Ok(updated);
