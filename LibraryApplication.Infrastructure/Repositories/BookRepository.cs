@@ -59,8 +59,10 @@ public class BookRepository : BaseCrudRepository<BookEntity>, IBookRepository
     public Task<List<BookEntity>> GetBorrowedBooksByUser(int userId)
     {
         return this.DbContext.Books
-            .Include(x =>x.BookTransfers)
-            .Where(x => !x.IsAvailable && x.BookTransfers.LastOrDefault().UserId == userId)
+            .Include(x => x.BookTransfers)
+            .Where(x => !x.IsAvailable 
+                        && x.BookTransfers.OrderBy(x => x.TransferDate)
+                            .LastOrDefault().UserId == userId)
             .ToListAsync();
     }
 
