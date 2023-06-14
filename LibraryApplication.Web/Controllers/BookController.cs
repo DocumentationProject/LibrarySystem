@@ -74,7 +74,7 @@ public class BookController : ControllerBase
     [ExistingBook]
     [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> ReturnBook(int id, [FromBody] int userId)
+    public async Task<IActionResult> ReturnBook(int id, [FromForm] int userId)
     {
         return Ok(await this.bookService.TryReturnBook(id, userId));
     }
