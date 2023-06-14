@@ -46,7 +46,7 @@ public class BookService : BaseCrudService<BookModel, BookEntity>, IBookService
 
         await bookRepository.CreateBookTransfer(bookId, userId, true, rentTimeInDays);
         await bookRepository.MarkBookAsBorrowed(bookId);
-        await userRepository.UpdateUserBalance(userId, userEntity.Balance - totalRentPrice);
+        await userRepository.UpdateUserBalance(userId, -1 * totalRentPrice);
         return true;
     }
 
