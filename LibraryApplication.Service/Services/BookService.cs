@@ -32,7 +32,7 @@ public class BookService : BaseCrudService<BookModel, BookEntity>, IBookService
         var userEntity = await userRepository.GetById(userId);
         var bookEntity = await bookRepository.GetById(bookId);
 
-        if (userEntity is null || bookEntity is null || !bookEntity.IsAvailable)
+        if (userEntity is null || bookEntity is null)
         {
             return false;
         }

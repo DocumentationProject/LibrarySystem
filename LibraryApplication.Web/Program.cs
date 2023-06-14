@@ -3,6 +3,7 @@ using LibraryApplication.Data.Interfaces.Services;
 using LibraryApplication.Infrastructure;
 using LibraryApplication.Infrastructure.Mappings;
 using LibraryApplication.Infrastructure.Repositories;
+using LibraryApplication.Middlewares;
 using LibraryApplication.Service.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -51,6 +52,8 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+
+//app.UseMiddleware<ErrorHandlingMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {
