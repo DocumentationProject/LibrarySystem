@@ -18,6 +18,11 @@ public class BookRepository : BaseCrudRepository<BookEntity>, IBookRepository
         entityToUpdate.RentPrice = passedEntity.RentPrice;
     }
 
+    public override Task<BookEntity> GetById(int id)
+    {
+        return this.DbContext.Books.Include(x => x.BookTransfers).FirstOrDefaultAsync(x => x.Id == id);
+    }
+
     public Task<bool> MarkBookAsBorrowed(int id)
     {
         return this.ChangeBookAvailabilityStatus(id, false);
