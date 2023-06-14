@@ -3,6 +3,7 @@ import {Button, notification, Table, Tag} from "antd";
 import {ArrowRightOutlined, CheckCircleOutlined, CloseCircleOutlined} from "@ant-design/icons";
 import {useUser} from "../../../hooks/useUser";
 import {API} from "../../../configs/axios.config";
+import Title from "antd/es/typography/Title";
 
 const RentedBooks = () => {
     const { user } = useUser();
@@ -81,12 +82,15 @@ const RentedBooks = () => {
     // }))
 
     return (
-        <Table
-            columns={columns}
-            //dataSource={data}
-            pagination={false}
-            //loading={loading}
-        />
+        <>
+            <Title level={2}>Rented books</Title>
+            <Table
+                columns={columns}
+                //dataSource={data}
+                pagination={false}
+                //loading={loading}
+            />
+        </>
     );
 };
 
