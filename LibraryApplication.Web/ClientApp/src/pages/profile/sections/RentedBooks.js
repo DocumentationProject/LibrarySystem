@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Button, notification, Table, Tag} from "antd";
 import {ArrowRightOutlined, CheckCircleOutlined, CloseCircleOutlined} from "@ant-design/icons";
 import {useUser} from "../../../hooks/useUser";
@@ -7,6 +7,46 @@ import Title from "antd/es/typography/Title";
 
 const RentedBooks = () => {
     const { user } = useUser();
+
+    const [books, setBooks] = useState([])
+    const [loading, setLoading] = useState(false)
+    const [authors, setAuthors] = useState([])
+    const [genres, setGenres] = useState([])
+
+    useEffect(() => {
+        (async () => {
+            setLoading(true)
+            try {
+                const {data: newBooks} = await API.get(`/api/User/${user.id}/books`)
+                setBooks(newBooks)
+            } catch (e) {
+                console.log(e)
+            }
+            setLoading(false)
+        })()
+    }, [])
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const {data: newGenres} = await API.get(`/api/Genre/all`)
+                setGenres(newGenres)
+            } catch (e) {
+                console.log(e)
+            }
+        })()
+    }, [])
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const {data: newAuthors} = await API.get(`/api/Author/all`)
+                setAuthors(newAuthors)
+            } catch (e) {
+                console.log(e)
+            }
+        })()
+    }, [])
 
     const columns = [
         {
@@ -18,6 +58,11 @@ const RentedBooks = () => {
             title: 'Author',
             dataIndex: 'author',
             key: 'author',
+        },
+        {
+            title: 'Genre',
+            dataIndex: 'genre',
+            key: 'genre',
         },
         {
             title: 'Rent price',
@@ -74,21 +119,29 @@ const RentedBooks = () => {
         }
     ];
 
-    // const data = criteria.map((criterion, index) => ({
-    //     key: index,
-    //     criterion: criterion.criterion,
-    //     reasoning: criterion.reasoning,
-    //     met: criterion.is_met,
-    // }))
+    const data = books.map(book => {
+        const author = authors.find(author => author.id === book.authorId)
+        const genre = genres.find(genre => genre.id === book.genreId)
+
+        return {
+        key: book.id,
+        name: book.name,
+        author: author?.name + ' ' + author?.surname,
+        genre: genre,
+        rentPrice: book.rentPrice,
+        rentedOn: book.rentedOn,
+        rentedDue: book.rentedDue,
+        overdue: book.overdue,
+    }})
 
     return (
         <>
             <Title level={2}>Rented books</Title>
             <Table
                 columns={columns}
-                //dataSource={data}
+                dataSource={data}
                 pagination={false}
-                //loading={loading}
+                loading={loading}
             />
         </>
     );
