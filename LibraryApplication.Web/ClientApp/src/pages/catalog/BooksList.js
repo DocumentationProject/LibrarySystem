@@ -5,6 +5,7 @@ import BookCard from "./BookCard";
 import {API} from "../../configs/axios.config";
 import {PlusOutlined} from "@ant-design/icons";
 import {useUser} from "../../hooks/useUser";
+import Title from "antd/es/typography/Title";
 
 const BooksList = () => {
     const { user } = useUser();
@@ -49,7 +50,10 @@ const BooksList = () => {
 
     return (
         <div>
-            {user.isAdmin && <Button className='mb-lg-4' onClick={() => setShowAddBookModal(true)} type='primary'><PlusOutlined/> Add Book</Button>}
+            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                <Title level={2}>Catalog</Title>
+                {user.isAdmin && <Button className='mb-lg-4' onClick={() => setShowAddBookModal(true)} type='primary'><PlusOutlined/> Add Book</Button>}
+            </div>
             {showAddBookModal && <AddBookModal setShowModal={setShowAddBookModal} setBooks={setBooks}/>}
             <List
                 grid={{
