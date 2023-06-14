@@ -1,4 +1,5 @@
 ﻿using LibraryApplication.Data.Interfaces.Services;
+using LibraryApplication.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryApplication.Controllers;
@@ -24,9 +25,9 @@ public class AdminController : ControllerBase
 
     [HttpPost("generate-damage-fines")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> GenerateFineForBookDamage([FromBody] int bookId, int amount)
+    public async Task<IActionResult> GenerateFineForBookDamage([FromBody] FineModel fineModel)
     {
-        await this.adminService.GenerateFineForBookDamage(bookId, amount);
+        await this.adminService.GenerateFineForBookDamage(fineModel.BookId, fineModel.Amount);
         return Ok();
     }
 }

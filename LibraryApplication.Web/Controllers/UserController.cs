@@ -10,10 +10,12 @@ namespace LibraryApplication.Controllers;
 public class UserController : ControllerBase
 {
     private readonly IUserService userService;
+    private readonly IBookService bookService;
 
-    public UserController(IUserService userService)
+    public UserController(IUserService userService, IBookService bookService)
     {
         this.userService = userService;
+        this.bookService = bookService;
     }
 
     [HttpPost]
@@ -79,12 +81,28 @@ public class UserController : ControllerBase
         return Ok(await this.userService.HasFines(id));
     }
     
-    [HttpPost("process-fine")]
+    [HttpPost("{id:int}process-fine")]
     [ExistingUser]
     [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> ProcessUserFine([FromBody] int userId, int bookId)
+    public async Task<IActionResult> ProcessUserFine(int id, [FromBody] int bookId)
     {
-        return Ok(await this.userService.TryProcessFinePayment(userId, bookId));
+        return Ok(await this.userService.TryProcessFinePayment(id, bookId));
+    }
+
+    [HttpGet("{id:int}/book-transfers")]
+    [ExistingUser]
+    [ProducesResponseType(typeof(List<BookTransferModel>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAllValidTransfers(int id)
+    {
+        return Ok(await this.userService.GetUserValidTransfers(id));
+    }
+
+    [HttpGet("{id:int}/books")]
+    [ExistingUser]
+    [ProducesResponseType(typeof(List<BookModel>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetBorrowedBooks(int id)
+    {
+        return Ok(await this.bookService.GetBorrowedBooksByUser(id));
     }
 }

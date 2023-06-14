@@ -65,17 +65,24 @@ public class BookController : ControllerBase
     [ExistingBook]
     [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> BorrowBook([FromBody] int id, int userId, int? discountId, int rentInDays)
+    public async Task<IActionResult> BorrowBook(int id, [FromBody] BorrowBookModel borrowBookModel)
     {
-        return Ok(await this.bookService.TryBorrowBook(id, userId, discountId, rentInDays));
+        return Ok(await this.bookService.TryBorrowBook(id, borrowBookModel.UserId, borrowBookModel.DiscountId, borrowBookModel.RentInDays));
     }
     
     [HttpPost("{id:int}/return")]
     [ExistingBook]
     [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> ReturnBook([FromBody] int id, int userId)
+    public async Task<IActionResult> ReturnBook(int id, [FromBody] int userId)
     {
         return Ok(await this.bookService.TryReturnBook(id, userId));
+    }
+
+    [HttpGet("available")]
+    [ProducesResponseType(typeof(List<BookModel>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAvailableBooks()
+    {
+        return Ok(await this.bookService.GetAvailableBooks());
     }
 }

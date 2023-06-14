@@ -11,4 +11,6 @@ public interface IUserRepository : IBaseCrudRepository<UserEntity>
     Task<int?> GetUserIdByLoginAndPassword(string login, string password);
 
     bool CheckIfUserExists(int id);
+    
+    Task<List<BookTransferEntity>> GetUserValidTransfers(int userId);
 }
