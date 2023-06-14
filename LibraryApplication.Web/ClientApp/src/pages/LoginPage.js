@@ -27,9 +27,12 @@ const LoginPage = () => {
                             remember: true,
                         }}
                         onFinish={onFinish}
+                        requiredMark={false}
+                        layout="vertical"
                     >
                         <Form.Item
                             name="login"
+                            label="Login"
                             rules={[
                                 {
                                     required: true,
@@ -41,6 +44,7 @@ const LoginPage = () => {
                         </Form.Item>
                         <Form.Item
                             name="password"
+                            label="Password"
                             rules={[
                                 {
                                     required: true,

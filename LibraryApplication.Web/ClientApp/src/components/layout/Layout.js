@@ -1,7 +1,8 @@
 import React from 'react';
-import {Menu, Layout as AntdLayout, theme, Dropdown, Button} from "antd";
+import {Menu, Layout as AntdLayout, theme, Dropdown, Button, Statistic, Space} from "antd";
 import {useAuth} from "../../hooks/useAuth";
 import {useUser} from "../../hooks/useUser";
+import {DollarOutlined} from "@ant-design/icons";
 
 const { Header, Content, Footer } = AntdLayout;
 
@@ -48,18 +49,21 @@ const Layout = ({children}) =>  {
                   mode="horizontal"
                   items={navMenuItems}
               />
-              <Dropdown
-                  menu={{items: userMenuItems}}
-                  overlayStyle={{minWidth: 180}}
-              >
-                  <Button type="text" size='large'>
-                      <UserOutlined /> {user?.name}
-                  </Button>
-              </Dropdown>
+              <Space size={16}>
+                <Statistic title="Balance" value={user.rentPrice} prefix='$' />
+                <Dropdown
+                    menu={{items: userMenuItems}}
+                    overlayStyle={{minWidth: 180}}
+                >
+                    <Button type="text" size='large'>
+                        <UserOutlined /> {user?.name}
+                    </Button>
+                </Dropdown>
+              </Space>
           </Header>
           <Content
               style={{
-                  padding: '0 50px',
+                  padding: '24px 48px',
               }}
           >
               <div
@@ -76,7 +80,7 @@ const Layout = ({children}) =>  {
                   textAlign: 'center',
               }}
           >
-              Ant Design ©2023 Created by Ant UED
+              Library
           </Footer>
       </AntdLayout>
   )

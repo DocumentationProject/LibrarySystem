@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router';
 import Layout from './components/layout/Layout';
 
 import './custom.css'
-import CatalogPage from "./pages/CatalogPage";
+import CatalogPage from "./pages/catalog/CatalogPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import AuthorizedRoute from "./components/AuthorizedRoute";

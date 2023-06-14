@@ -33,9 +33,12 @@ const RegisterPage = () => {
                             remember: true,
                         }}
                         onFinish={onFinish}
+                        requiredMark={false}
+                        layout="vertical"
                     >
                         <Form.Item
                             name="name"
+                            label="Name"
                             rules={[
                                 {
                                     required: true,
@@ -47,6 +50,7 @@ const RegisterPage = () => {
                         </Form.Item>
                         <Form.Item
                             name="surname"
+                            label="Surname"
                             rules={[
                                 {
                                     required: true,
@@ -58,6 +62,7 @@ const RegisterPage = () => {
                         </Form.Item>
                         <Form.Item
                             name="address"
+                            label="Address"
                             rules={[
                                 {
                                     required: true,
@@ -69,6 +74,7 @@ const RegisterPage = () => {
                         </Form.Item>
                         <Form.Item
                             name="login"
+                            label="Login"
                             rules={[
                                 {
                                     required: true,
@@ -80,6 +86,7 @@ const RegisterPage = () => {
                         </Form.Item>
                         <Form.Item
                             name="password"
+                            label="Password"
                             rules={[
                                 {
                                     required: true,
@@ -96,7 +103,7 @@ const RegisterPage = () => {
                             <Button type="primary" htmlType="submit">
                                 Register
                             </Button>
-                            Or <Link to="/login">log in</Link>
+                                Or <Link to="/login">log in</Link>
                         </Form.Item>
                     </Form>
                 </Card>
