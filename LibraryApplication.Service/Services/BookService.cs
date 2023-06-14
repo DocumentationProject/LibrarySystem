@@ -27,7 +27,7 @@ public class BookService : BaseCrudService<BookModel, BookEntity>, IBookService
         this.fineRepository = fineRepository;
     }
 
-    public async Task<bool> TryBorrowBook(int bookId, int userId, int? discountId, int rentTimeInDays)
+    public async Task<bool> TryBorrowBook(int bookId, int userId, int rentTimeInDays)
     {
         var userEntity = await userRepository.GetById(userId);
         var bookEntity = await bookRepository.GetById(bookId);
@@ -38,19 +38,13 @@ public class BookService : BaseCrudService<BookModel, BookEntity>, IBookService
         }
 
         double totalRentPrice = bookEntity.RentPrice;
-        
-        if (discountId is not null)
-        {
-            var discountEntity = await discountRepository.GetById((int)discountId);
-            totalRentPrice = bookEntity.RentPrice - (discountEntity?.Amount ?? 0);
-        }
 
         if (userEntity.Balance < totalRentPrice)
         {
             return false;
         }
 
-        await bookRepository.CreateBookTransfer(bookId, userId, true, discountId, rentTimeInDays);
+        await bookRepository.CreateBookTransfer(bookId, userId, true, rentTimeInDays);
         await bookRepository.MarkBookAsBorrowed(bookId);
         await userRepository.UpdateUserBalance(userId, userEntity.Balance - totalRentPrice);
         return true;
@@ -79,7 +73,7 @@ public class BookService : BaseCrudService<BookModel, BookEntity>, IBookService
             return false;
         }
 
-        await bookRepository.CreateBookTransfer(bookId, userId, true, -1, -1);
+        await bookRepository.CreateBookTransfer(bookId, userId, true, -1);
         await bookRepository.MarkBookAsAvailable(bookId);
         return true;
     }

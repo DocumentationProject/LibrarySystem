@@ -28,14 +28,13 @@ public class BookRepository : BaseCrudRepository<BookEntity>, IBookRepository
         return this.ChangeBookAvailabilityStatus(id, true);
     }
 
-    public async Task<int> CreateBookTransfer(int bookId, int userId, bool isBorrowed, int? discountId, int? rentTimeInDays)
+    public async Task<int> CreateBookTransfer(int bookId, int userId, bool isBorrowed, int? rentTimeInDays)
     {
         BookTransferEntity bookTransfer = new()
         {
             BookId = bookId,
             IsBorrowed = isBorrowed,
             UserId = userId,
-            DiscountId = discountId,
             IsReturned = !isBorrowed,
             ExpectedReturnDate = rentTimeInDays is not null ? DateTime.Now.AddDays((double)rentTimeInDays) : null
         };

@@ -34,6 +34,9 @@ public sealed class LibraryApplicationDbContext: DbContext
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<UserCategoryEntity>().HasKey(x => x.Id);
+        modelBuilder.Entity<UserCategoryEntity>().Property(x => x.Id).ValueGeneratedOnAdd();
+        
         modelBuilder.Entity<BookEntity>()
             .HasOne(x => x.AuthorEntity)
             .WithMany(x => x.Books)
@@ -48,11 +51,6 @@ public sealed class LibraryApplicationDbContext: DbContext
             .HasOne(x => x.BookEntity)
             .WithMany(x => x.BookTransfers)
             .HasForeignKey(x => x.BookId);
-        
-        modelBuilder.Entity<BookTransferEntity>()
-            .HasOne(x => x.DiscountEntity)
-            .WithMany(x => x.BookTransfers)
-            .HasForeignKey(x => x.DiscountId);
 
         modelBuilder.Entity<FineEntity>()
             .HasOne(x => x.UserEntity)

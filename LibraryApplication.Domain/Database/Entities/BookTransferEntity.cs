@@ -16,15 +16,11 @@ public class BookTransferEntity : IEntityBase
 
     public DateTime TransferDate { get; set; }
 
-    public int? DiscountId { get; set; }
-
     public DateTime? ExpectedReturnDate { get; set; }
 
     public virtual BookEntity BookEntity { get; set; }
 
     public virtual UserEntity UserEntity { get; set; }
 
-    public virtual DiscountEntity DiscountEntity { get; set; }
-    
     public virtual List<FineEntity> Fines { get; set; }
 }

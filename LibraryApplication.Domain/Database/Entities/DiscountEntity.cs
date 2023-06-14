@@ -10,7 +10,7 @@ public class DiscountEntity : IEntityBase
 
     public int Amount { get; set; }
     
-    public int? UserCategoryId { get; set; }
+    public int UserCategoryId { get; set; }
 
     public virtual List<BookTransferEntity> BookTransfers { get; set; }
     
