@@ -2,32 +2,32 @@
 using LibraryApplication.Data.Interfaces.Repositories;
 using LibraryApplication.Data.Interfaces.Services;
 
-namespace LibraryApplication.Service;
+namespace LibraryApplication.Service.Services;
 
 public class AdminService : IAdminService
 {
-    private readonly IFineRepository _fineRepository;
-    private readonly IBookRepository _bookRepository;
-    private readonly IDiscountRepository _discountRepository;
+    private readonly IFineRepository fineRepository;
+    private readonly IBookRepository bookRepository;
+    private readonly IDiscountRepository discountRepository;
 
     public AdminService(
         IFineRepository fineRepository,
         IBookRepository bookRepository,
         IDiscountRepository discountRepository)
     {
-        _fineRepository = fineRepository;
-        _bookRepository = bookRepository;
-        _discountRepository = discountRepository;
+        this.fineRepository = fineRepository;
+        this.bookRepository = bookRepository;
+        this.discountRepository = discountRepository;
     }
 
     public async Task GenerateFinesPastDueDate(int amount)
     {
-        foreach (BookEntity book in await _bookRepository.GetAllBorrowedBooks())
+        foreach (var book in await bookRepository.GetAllBorrowedBooks())
         {
             var bookTransferEntity = book.BookTransfers.LastOrDefault();
             if (bookTransferEntity is not null && bookTransferEntity.IsBorrowed && bookTransferEntity.ExpectedReturnDate <= DateTime.Now)
             {
-                var finesByUserId = await _fineRepository.GetFinesByUserId(bookTransferEntity.UserEntity.Id);
+                var finesByUserId = await fineRepository.GetFinesByUserId(bookTransferEntity.UserEntity.Id);
                 await CreateOrUpdateFine(amount, finesByUserId, bookTransferEntity);
             }
         }
@@ -35,7 +35,7 @@ public class AdminService : IAdminService
 
     public async Task<bool> GenerateFineForBookDamage(int bookId, int amount)
     {
-        BookEntity bookEntity = await _bookRepository.GetById(bookId);
+        BookEntity bookEntity = await bookRepository.GetById(bookId);
 
         if (bookEntity is null)
         {
@@ -49,21 +49,21 @@ public class AdminService : IAdminService
             return false;
         }
 
-        List<FineEntity> finesByUserId = await _fineRepository.GetFinesByUserId(bookTransferEntity.UserEntity.Id);
+        List<FineEntity> finesByUserId = await fineRepository.GetFinesByUserId(bookTransferEntity.UserEntity.Id);
         await CreateOrUpdateFine(amount, finesByUserId, bookTransferEntity);
         return true;
     }
 
     public async Task<bool> AddDiscount(int userCategoryId, int discountTypeId)
     {
-        var discountEntity = await _discountRepository.GetById(discountTypeId);
+        var discountEntity = await discountRepository.GetById(discountTypeId);
 
         if (discountEntity is null)
         {
             return false;
         }
 
-        return await _discountRepository.CreateDiscountByUserType(discountEntity.Amount, userCategoryId) != -1;
+        return await discountRepository.CreateDiscountByUserType(discountEntity.Amount, userCategoryId) != -1;
     }
 
     private async Task CreateOrUpdateFine(int amount, List<FineEntity> finesByUserId, BookTransferEntity bookTransferEntity)
@@ -72,7 +72,7 @@ public class AdminService : IAdminService
 
         if (existingFine is null)
         {
-            await _fineRepository.Create(new FineEntity
+            await fineRepository.Create(new FineEntity
             {
                 UserEntity = bookTransferEntity.UserEntity,
                 BookTransferEntity = bookTransferEntity,
@@ -85,7 +85,7 @@ public class AdminService : IAdminService
         else
         {
             existingFine.Amount += amount;
-            await _fineRepository.Update(existingFine.Id, existingFine);
+            await fineRepository.Update(existingFine.Id, existingFine);
         }
     }
 }

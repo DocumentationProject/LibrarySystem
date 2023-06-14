@@ -1,15 +1,17 @@
-﻿namespace LibraryApplication.Data.Interfaces.Services;
+﻿using LibraryApplication.Data.Models;
 
-public interface IBaseCrudService<T>
+namespace LibraryApplication.Data.Interfaces.Services;
+
+public interface IBaseCrudService<TModel> 
+    where TModel:IModelBase 
 {
-    Task<List<T>> GetAll();
+    Task<List<TModel>> GetAll();
 
-    Task<int> Create(T entity);
+    Task<int> Create(TModel entity);
 
-    Task<T> GetById(int id);
- 
-    Task<bool> Update(int id, T entity);
+    Task<TModel> GetById(int id);
+
+    Task<bool> Update(int id, TModel entity);
 
     Task<bool> Delete(int id);
-
 }

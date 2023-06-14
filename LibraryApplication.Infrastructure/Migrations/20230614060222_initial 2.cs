@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace LibraryApplication.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class initial2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -45,7 +45,8 @@ namespace LibraryApplication.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Amount = table.Column<int>(type: "int", nullable: false)
+                    Amount = table.Column<int>(type: "int", nullable: false),
+                    UserCategoryId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -66,19 +67,6 @@ namespace LibraryApplication.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserCategories",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserCategories", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -90,6 +78,7 @@ namespace LibraryApplication.Infrastructure.Migrations
                     IsAdmin = table.Column<bool>(type: "bit", nullable: false),
                     Login = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Balance = table.Column<double>(type: "float", nullable: false),
                     RegisterDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -104,6 +93,7 @@ namespace LibraryApplication.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsAvailable = table.Column<bool>(type: "bit", nullable: false),
                     AuthorId = table.Column<int>(type: "int", nullable: false),
                     RentPrice = table.Column<double>(type: "float", nullable: false),
                     GenreId = table.Column<int>(type: "int", nullable: false)
@@ -121,6 +111,24 @@ namespace LibraryApplication.Infrastructure.Migrations
                         name: "FK_Books_BookGenres_GenreId",
                         column: x => x.GenreId,
                         principalTable: "BookGenres",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserCategories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserCategories", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserCategories_Discounts_Id",
+                        column: x => x.Id,
+                        principalTable: "Discounts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -145,26 +153,6 @@ namespace LibraryApplication.Infrastructure.Migrations
                         name: "FK_BudgetTransfers_TransferTypes_TransferTypeId",
                         column: x => x.TransferTypeId,
                         principalTable: "TransferTypes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserBalances",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    Amount = table.Column<double>(type: "float", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserBalances", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_UserBalances_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -198,30 +186,6 @@ namespace LibraryApplication.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserUserCategory",
-                columns: table => new
-                {
-                    UserCategoriesId = table.Column<int>(type: "int", nullable: false),
-                    UsersId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserUserCategory", x => new { x.UserCategoriesId, x.UsersId });
-                    table.ForeignKey(
-                        name: "FK_UserUserCategory_UserCategories_UserCategoriesId",
-                        column: x => x.UserCategoriesId,
-                        principalTable: "UserCategories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UserUserCategory_Users_UsersId",
-                        column: x => x.UsersId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "BookTransfers",
                 columns: table => new
                 {
@@ -232,8 +196,9 @@ namespace LibraryApplication.Infrastructure.Migrations
                     IsBorrowed = table.Column<bool>(type: "bit", nullable: false),
                     IsReturned = table.Column<bool>(type: "bit", nullable: false),
                     TransferDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DiscountId = table.Column<int>(type: "int", nullable: false),
-                    ExpectedReturnDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    DiscountId = table.Column<int>(type: "int", nullable: true),
+                    ExpectedReturnDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UserEntityId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -248,11 +213,33 @@ namespace LibraryApplication.Infrastructure.Migrations
                         name: "FK_BookTransfers_Discounts_DiscountId",
                         column: x => x.DiscountId,
                         principalTable: "Discounts",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_BookTransfers_Users_UserEntityId",
+                        column: x => x.UserEntityId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserCategoryEntityUserEntity",
+                columns: table => new
+                {
+                    UserCategoriesId = table.Column<int>(type: "int", nullable: false),
+                    UsersId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserCategoryEntityUserEntity", x => new { x.UserCategoriesId, x.UsersId });
+                    table.ForeignKey(
+                        name: "FK_UserCategoryEntityUserEntity_UserCategories_UserCategoriesId",
+                        column: x => x.UserCategoriesId,
+                        principalTable: "UserCategories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_BookTransfers_Users_UserId",
-                        column: x => x.UserId,
+                        name: "FK_UserCategoryEntityUserEntity_Users_UsersId",
+                        column: x => x.UsersId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -306,9 +293,9 @@ namespace LibraryApplication.Infrastructure.Migrations
                 column: "DiscountId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BookTransfers_UserId",
+                name: "IX_BookTransfers_UserEntityId",
                 table: "BookTransfers",
-                column: "UserId");
+                column: "UserEntityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BudgetTransfers_TransferTypeId",
@@ -326,12 +313,6 @@ namespace LibraryApplication.Infrastructure.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserBalances_UserId",
-                table: "UserBalances",
-                column: "UserId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_UserBalanceTransfers_TransferTypeId",
                 table: "UserBalanceTransfers",
                 column: "TransferTypeId");
@@ -342,8 +323,8 @@ namespace LibraryApplication.Infrastructure.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserUserCategory_UsersId",
-                table: "UserUserCategory",
+                name: "IX_UserCategoryEntityUserEntity_UsersId",
+                table: "UserCategoryEntityUserEntity",
                 column: "UsersId");
         }
 
@@ -357,13 +338,10 @@ namespace LibraryApplication.Infrastructure.Migrations
                 name: "Fines");
 
             migrationBuilder.DropTable(
-                name: "UserBalances");
-
-            migrationBuilder.DropTable(
                 name: "UserBalanceTransfers");
 
             migrationBuilder.DropTable(
-                name: "UserUserCategory");
+                name: "UserCategoryEntityUserEntity");
 
             migrationBuilder.DropTable(
                 name: "BookTransfers");
@@ -378,10 +356,10 @@ namespace LibraryApplication.Infrastructure.Migrations
                 name: "Books");
 
             migrationBuilder.DropTable(
-                name: "Discounts");
+                name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Discounts");
 
             migrationBuilder.DropTable(
                 name: "Authors");

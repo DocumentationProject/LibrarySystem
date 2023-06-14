@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LibraryApplication.Infrastructure.Migrations
 {
     [DbContext(typeof(LibraryApplicationDbContext))]
-    [Migration("20230611125521_updated user entity")]
-    partial class updateduserentity
+    [Migration("20230614060222_initial 2")]
+    partial class initial2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -103,10 +103,10 @@ namespace LibraryApplication.Infrastructure.Migrations
                     b.Property<int>("BookId")
                         .HasColumnType("int");
 
-                    b.Property<int>("DiscountId")
+                    b.Property<int?>("DiscountId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("ExpectedReturnDate")
+                    b.Property<DateTime?>("ExpectedReturnDate")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsBorrowed")
@@ -182,6 +182,9 @@ namespace LibraryApplication.Infrastructure.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("UserCategoryId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Discounts");
@@ -232,25 +235,6 @@ namespace LibraryApplication.Infrastructure.Migrations
                     b.ToTable("TransferTypes");
                 });
 
-            modelBuilder.Entity("LibraryApplication.Data.Database.Entities.UserBalanceEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<double>("Amount")
-                        .HasColumnType("float");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("UserBalances");
-                });
-
             modelBuilder.Entity("LibraryApplication.Data.Database.Entities.UserBalanceTransferEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -283,10 +267,7 @@ namespace LibraryApplication.Infrastructure.Migrations
             modelBuilder.Entity("LibraryApplication.Data.Database.Entities.UserCategoryEntity", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -299,7 +280,10 @@ namespace LibraryApplication.Infrastructure.Migrations
             modelBuilder.Entity("LibraryApplication.Data.Database.Entities.UserEntity", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
@@ -374,9 +358,7 @@ namespace LibraryApplication.Infrastructure.Migrations
 
                     b.HasOne("LibraryApplication.Data.Database.Entities.DiscountEntity", "DiscountEntity")
                         .WithMany("BookTransfers")
-                        .HasForeignKey("DiscountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DiscountId");
 
                     b.HasOne("LibraryApplication.Data.Database.Entities.UserEntity", "UserEntity")
                         .WithMany()
@@ -438,15 +420,15 @@ namespace LibraryApplication.Infrastructure.Migrations
                     b.Navigation("UserEntity");
                 });
 
-            modelBuilder.Entity("LibraryApplication.Data.Database.Entities.UserEntity", b =>
+            modelBuilder.Entity("LibraryApplication.Data.Database.Entities.UserCategoryEntity", b =>
                 {
-                    b.HasOne("LibraryApplication.Data.Database.Entities.UserBalanceEntity", "UserBalanceEntity")
-                        .WithOne("UserEntity")
-                        .HasForeignKey("LibraryApplication.Data.Database.Entities.UserEntity", "Id")
+                    b.HasOne("LibraryApplication.Data.Database.Entities.DiscountEntity", "Discount")
+                        .WithOne("UserCategory")
+                        .HasForeignKey("LibraryApplication.Data.Database.Entities.UserCategoryEntity", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("UserBalanceEntity");
+                    b.Navigation("Discount");
                 });
 
             modelBuilder.Entity("UserCategoryEntityUserEntity", b =>
@@ -487,6 +469,8 @@ namespace LibraryApplication.Infrastructure.Migrations
             modelBuilder.Entity("LibraryApplication.Data.Database.Entities.DiscountEntity", b =>
                 {
                     b.Navigation("BookTransfers");
+
+                    b.Navigation("UserCategory");
                 });
 
             modelBuilder.Entity("LibraryApplication.Data.Database.Entities.TransferType", b =>
@@ -494,11 +478,6 @@ namespace LibraryApplication.Infrastructure.Migrations
                     b.Navigation("BudgetTransfers");
 
                     b.Navigation("UserBalanceTransfers");
-                });
-
-            modelBuilder.Entity("LibraryApplication.Data.Database.Entities.UserBalanceEntity", b =>
-                {
-                    b.Navigation("UserEntity");
                 });
 
             modelBuilder.Entity("LibraryApplication.Data.Database.Entities.UserEntity", b =>
