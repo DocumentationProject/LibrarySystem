@@ -88,18 +88,44 @@ const RentedBooks = () => {
         const handleReturnBook = async () => {
           try {
             await API.post(
-              `/api/Book/${book.key}/return`,
+              `/api/Book/${book.bookId}/return`,
               {},
               { params: { userId: user?.id } }
             );
             notification.success({ message: "Book returned!" });
             await getBooks();
           } catch (error) {
+            notification.error({ message: "Failed to return book!" });
             console.log(error);
           }
         };
 
-        return (
+        const handlePayFine = async () => {
+          try {
+            await API.post(
+              `/api/User/${user?.id}/process-fine`,
+              {},
+              { params: { bookId: book.bookId } }
+            );
+            notification.success({ message: "Successfully payed fine!" });
+            await getBooks();
+          } catch (error) {
+            notification.error({ message: "Failed to pay fine!" });
+            console.log(error);
+          }
+        };
+
+        return book.hasFines ? (
+          <Button
+            shape="circle"
+            type="text"
+            onClick={handlePayFine}
+            color="red"
+            danger
+          >
+            Pay fine
+          </Button>
+        ) : (
           <Button shape="circle" type="text" onClick={handleReturnBook}>
             <ArrowRightOutlined />
           </Button>
@@ -120,6 +146,8 @@ const RentedBooks = () => {
         "DD/MM/YYYY hh:mm:ss"
       ),
       overdue: moment.now() > book.expectedReturnDate,
+      hasFines: book.hasFines,
+      bookId: book.bookId,
     };
   });
 

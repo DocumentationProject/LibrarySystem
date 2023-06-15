@@ -78,7 +78,7 @@ public class BookService : BaseCrudService<BookModel, BookEntity>, IBookService
             return false;
         }
 
-        await bookRepository.CreateBookTransfer(bookId, userId, true, -1);
+        await bookRepository.CreateBookTransfer(bookId, userId, false, null);
         await bookRepository.MarkBookAsAvailable(bookId);
         return true;
     }

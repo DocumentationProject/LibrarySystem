@@ -59,13 +59,17 @@ public class UserRepository : BaseCrudRepository<UserEntity>, IUserRepository
     {
         var allBorrowTransfers= this.DbContext.BookTransfers
             .Where(x => x.UserId == userId && x.IsBorrowed);
-
-        var allReturnTransfers = this.DbContext.BookTransfers
+        var allReturnedTransfers= this.DbContext.BookTransfers
             .Where(x => x.UserId == userId && x.IsReturned);
+        var result = 
+                from borrow in allBorrowTransfers
+                join r in allReturnedTransfers
+                    on borrow.BookId equals r.BookId into rt
+                from returned in rt.DefaultIfEmpty()
+                select returned == null ? borrow : null;
 
-        return allBorrowTransfers
-            .Where(x => !allReturnTransfers.Any(y => x.BookId == y.BookId))
-            .ToListAsync();
-
+        return result.All(x => x == null) 
+            ? Task.FromResult(new List<BookTransferEntity>()) 
+            : result.ToListAsync();
     }
 }

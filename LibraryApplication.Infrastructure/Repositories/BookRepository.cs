@@ -16,6 +16,7 @@ public class BookRepository : BaseCrudRepository<BookEntity>, IBookRepository
         entityToUpdate.GenreId = passedEntity.GenreId;
         entityToUpdate.AuthorId = passedEntity.AuthorId;
         entityToUpdate.RentPrice = passedEntity.RentPrice;
+        entityToUpdate.IsAvailable = passedEntity.IsAvailable;
     }
 
     public override Task<BookEntity> GetById(int id)

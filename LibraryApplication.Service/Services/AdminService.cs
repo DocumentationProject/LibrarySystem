@@ -53,7 +53,7 @@ public class AdminService : IAdminService
             return false;
         }
 
-        var finesByUserId = await fineRepository.GetFinesByUserId(bookTransferEntity.UserEntity.Id);
+        var finesByUserId = await fineRepository.GetFinesByUserId(bookTransferEntity.UserId);
         await CreateOrUpdateFine(amount, finesByUserId, bookTransferEntity);
         return true;
     }
@@ -66,11 +66,9 @@ public class AdminService : IAdminService
         {
             await fineRepository.Create(new FineEntity
             {
-                UserEntity = bookTransferEntity.UserEntity,
-                BookTransferEntity = bookTransferEntity,
                 BookTransferId = bookTransferEntity.Id,
                 Date = DateTime.Now,
-                UserId = bookTransferEntity.UserEntity.Id,
+                UserId = bookTransferEntity.UserId,
                 Amount = amount,
             });
         }

@@ -19,6 +19,8 @@ public class MappingProfile : Profile
             .ForMember(x => x.Genre, y => y.MapFrom(z => z.BookEntity.Genre.Name))
             .ForMember(x => x.Author, y => y.MapFrom(z => $"{z.BookEntity.AuthorEntity.Name} {z.BookEntity.AuthorEntity.Surname}"))
             .ForMember(x => x.HasFines, y => y.MapFrom(z => z.Fines.Any()))
+            .ForMember(x => x.BookId, y => y.MapFrom(z => z.BookId))
+            .ForMember(x => x.UserId, y => y.MapFrom(z => z.UserId))
             .ForMember(x => x.RentPrice, y => y.MapFrom(z => z.BookEntity.RentPrice));
         CreateMap<BudgetTransferEntity, BudgetTransferModel>();
         CreateMap<DiscountEntity, DiscountModel>();

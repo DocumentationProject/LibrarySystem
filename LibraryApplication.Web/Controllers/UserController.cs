@@ -85,7 +85,7 @@ public class UserController : ControllerBase
     [ExistingUser]
     [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> ProcessUserFine(int id, [FromForm] int bookId)
+    public async Task<IActionResult> ProcessUserFine(int id, [FromQuery] int bookId)
     {
         return Ok(await this.userService.TryProcessFinePayment(id, bookId));
     }
