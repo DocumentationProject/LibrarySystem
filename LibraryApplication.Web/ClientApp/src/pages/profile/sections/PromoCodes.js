@@ -45,7 +45,7 @@ const PromoCodes = () => {
             render: promoCode => {
                 const handleDeletePromoCode = async () => {
                     try {
-                        const isSuccess = await API.delete(`/api/PromoCode/${promoCode.key}/delete`)
+                        const isSuccess = await API.delete(`/api/Discount/${promoCode.key}/delete`)
                         if (isSuccess.data === true) {
                             notification.success({message: 'Promo code deleted!'})
                             await getPromoCodes();
