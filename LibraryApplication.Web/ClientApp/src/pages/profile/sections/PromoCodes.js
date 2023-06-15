@@ -73,7 +73,7 @@ const PromoCodes = () => {
         return {
             key: promoCode.id,
             name: promoCode.name,
-            discountPercent: promoCode.discountPercent,
+            discountPercent: promoCode.amount,
         }})
 
     return (
