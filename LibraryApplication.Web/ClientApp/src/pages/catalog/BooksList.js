@@ -14,12 +14,16 @@ const BooksList = () => {
     const [authors, setAuthors] = useState([])
     const [genres, setGenres] = useState([])
     const [showAddBookModal, setShowAddBookModal] = useState(false)
+    
+    const getBooks = async () => {
+        const {data: newBooks} = await API.get(`/api/Book/all`)
+        setBooks(newBooks)
+    }
 
     useEffect(() => {
         (async () => {
             try {
-                const {data: newBooks} = await API.get(`/api/Book/all`)
-                setBooks(newBooks)
+                await getBooks();
             } catch (e) {
                 console.log(e)
             }
@@ -63,7 +67,7 @@ const BooksList = () => {
                 dataSource={books}
                 renderItem={(book) => (
                     <List.Item>
-                        <BookCard book={book} authors={authors} genres={genres} setBooks={setBooks}/>
+                        <BookCard book={book} authors={authors} genres={genres} getBooks={getBooks}/>
                     </List.Item>
                 )}
             />

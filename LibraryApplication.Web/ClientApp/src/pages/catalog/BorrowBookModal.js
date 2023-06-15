@@ -4,20 +4,25 @@ import {API} from "../../configs/axios.config";
 import {useUser} from "../../hooks/useUser";
 import {useAuth} from "../../hooks/useAuth";
 
-const BorrowBookModal = ({book, setShowModal}) => {
+const BorrowBookModal = ({book, setShowModal, getBooks}) => {
     const { user } = useUser();
     const { login } = useAuth();
     const onFinish = async (values) => {
         try {
-             await API.post(`/api/Book/${book.id}/borrow`, {
+             const isSuccess = await API.post(`/api/Book/${book.id}/borrow`, {
                     userId: user.id,
                     rentInDays: values.rentInDays
                 })
             const {data: newUser} = await API.get(`/api/User/${user.id}`)
             login(newUser)
-            notification.success({message: 'Book borrowed!'})
+            
+            isSuccess.data === true 
+                ? notification.success({message: 'Book borrowed!'}) 
+                : notification.error({message: 'Failed to borrow book!'})
+            
             setShowModal(false)
 
+            await getBooks();
         } catch (e) {
             console.log(e)
         }
