@@ -5,7 +5,7 @@ import {Button, Form, Input, InputNumber, Modal, notification} from "antd";
 const CreatePromoCodeModal = ({setShowModal, getPromoCodes}) => {
     const onFinish = async (values) => {
         try {
-            await API.post(`/api/Discount/create`, {name: values.name, discountPercent: values.discountPercent})
+            await API.post(`/api/Discount/create`, {name: values.promoCode, discountPercent: values.discountPercent})
             await getPromoCodes()
             setShowModal(false)
             notification.success({message: 'Promo code created!'})
