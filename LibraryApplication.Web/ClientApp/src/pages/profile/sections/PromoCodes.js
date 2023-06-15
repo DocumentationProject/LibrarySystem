@@ -11,7 +11,7 @@ const PromoCodes = () => {
     const [loading, setLoading] = useState(false)
 
     const getPromoCodes = async () => {
-        const {data: newPromoCodes} = await API.get(`/api/PromoCode/all`)
+        const {data: newPromoCodes} = await API.get(`/api/Discount/all`)
         setPromoCodes(newPromoCodes)
     }
 
