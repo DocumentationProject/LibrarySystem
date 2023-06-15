@@ -20,7 +20,7 @@ public class BookRepository : BaseCrudRepository<BookEntity>, IBookRepository
 
     public override Task<BookEntity> GetById(int id)
     {
-        return this.DbContext.Books.Include(x => x.BookTransfers).FirstOrDefaultAsync(x => x.Id == id);
+        return this.DbContext.Books.FirstOrDefaultAsync(x => x.Id == id);
     }
 
     public Task<bool> MarkBookAsBorrowed(int id)
@@ -37,6 +37,7 @@ public class BookRepository : BaseCrudRepository<BookEntity>, IBookRepository
     {
         BookTransferEntity bookTransfer = new()
         {
+            TransferDate = DateTime.Now,
             BookId = bookId,
             IsBorrowed = isBorrowed,
             UserId = userId,
@@ -63,7 +64,6 @@ public class BookRepository : BaseCrudRepository<BookEntity>, IBookRepository
     public Task<List<BookEntity>> GetBorrowedBooksByUser(int userId)
     {
         return this.DbContext.Books
-            .Include(x => x.BookTransfers)
             .Where(x => !x.IsAvailable 
                         && x.BookTransfers.OrderBy(x => x.TransferDate)
                             .LastOrDefault().UserId == userId)

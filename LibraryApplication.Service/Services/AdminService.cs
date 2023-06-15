@@ -1,4 +1,5 @@
-﻿using LibraryApplication.Data.Database.Entities;
+﻿using AutoMapper;
+using LibraryApplication.Data.Database.Entities;
 using LibraryApplication.Data.Interfaces.Repositories;
 using LibraryApplication.Data.Interfaces.Services;
 
@@ -9,15 +10,18 @@ public class AdminService : IAdminService
     private readonly IFineRepository fineRepository;
     private readonly IBookRepository bookRepository;
     private readonly IDiscountRepository discountRepository;
+    private readonly IMapper mapper;
 
     public AdminService(
         IFineRepository fineRepository,
         IBookRepository bookRepository,
-        IDiscountRepository discountRepository)
+        IDiscountRepository discountRepository, 
+        IMapper mapper)
     {
         this.fineRepository = fineRepository;
         this.bookRepository = bookRepository;
         this.discountRepository = discountRepository;
+        this.mapper = mapper;
     }
 
     public async Task GenerateFinesPastDueDate(int amount)
@@ -49,17 +53,12 @@ public class AdminService : IAdminService
             return false;
         }
 
-        List<FineEntity> finesByUserId = await fineRepository.GetFinesByUserId(bookTransferEntity.UserEntity.Id);
+        var finesByUserId = await fineRepository.GetFinesByUserId(bookTransferEntity.UserEntity.Id);
         await CreateOrUpdateFine(amount, finesByUserId, bookTransferEntity);
         return true;
     }
 
-    public Task<int> AddDiscount(int userCategoryId, int amount)
-    {
-        return discountRepository.CreateDiscountByUserType(amount, userCategoryId);
-    }
-
-    private async Task CreateOrUpdateFine(int amount, List<FineEntity> finesByUserId, BookTransferEntity bookTransferEntity)
+    private async Task CreateOrUpdateFine(int amount, IEnumerable<FineEntity> finesByUserId, BookTransferEntity bookTransferEntity)
     {
         var existingFine = finesByUserId.FirstOrDefault(x => x.BookTransferId == bookTransferEntity.Id);
 

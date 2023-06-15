@@ -30,11 +30,4 @@ public class AdminController : ControllerBase
         await this.adminService.GenerateFineForBookDamage(fineModel.BookId, fineModel.Amount);
         return Ok();
     }
-
-    [HttpPost("discount")]
-    [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
-    public async Task<IActionResult> CreateDiscount([FromBody] DiscountModel discountModel)
-    {
-        return Ok(await this.adminService.AddDiscount(discountModel.UserCategoryId, discountModel.Amount));
-    }
 }

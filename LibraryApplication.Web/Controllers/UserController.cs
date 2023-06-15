@@ -81,7 +81,7 @@ public class UserController : ControllerBase
         return Ok(await this.userService.HasFines(id));
     }
     
-    [HttpPost("{id:int}process-fine")]
+    [HttpPost("{id:int}/process-fine")]
     [ExistingUser]
     [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

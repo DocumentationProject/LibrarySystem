@@ -10,5 +10,4 @@ public class UserCategoryEntity : IEntityBase
 
     public virtual List<UserEntity> Users { get; set; } = new();
     
-    public virtual DiscountEntity Discount { get; set; }
 }

@@ -81,10 +81,5 @@ public sealed class LibraryApplicationDbContext: DbContext
             .HasOne(x => x.TransferType)
             .WithMany(x => x.BudgetTransfers)
             .HasForeignKey(x => x.TransferTypeId);
-
-        modelBuilder.Entity<DiscountEntity>()
-            .HasOne(x => x.UserCategory)
-            .WithOne(x => x.Discount)
-            .HasForeignKey<UserCategoryEntity>(x => x.Id);
     }
 }

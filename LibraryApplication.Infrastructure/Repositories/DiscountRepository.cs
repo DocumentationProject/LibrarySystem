@@ -1,5 +1,6 @@
 ﻿using LibraryApplication.Data.Database.Entities;
 using LibraryApplication.Data.Interfaces.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace LibraryApplication.Infrastructure.Repositories;
 
@@ -15,15 +16,8 @@ public class DiscountRepository : BaseCrudRepository<DiscountEntity>, IDiscountR
         entityToUpdate.Amount = passedEntity.Amount;
     }
 
-    public Task<int> CreateDiscountByUserType(int amount, int userCategoryId, string name = null)
+    public Task<DiscountEntity> GetByName(string name)
     {
-        DiscountEntity discount = new()
-        {
-            Amount = amount, 
-            UserCategoryId = userCategoryId, 
-            Name = name ?? $"Discount for {userCategoryId}"
-        };
-
-        return this.Create(discount);
+        return this.DbContext.Discounts.FirstOrDefaultAsync(x => x.Name == name);
     }
 }

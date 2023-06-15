@@ -14,7 +14,12 @@ public class MappingProfile : Profile
         CreateMap<FineEntity, FineModel>();
         CreateMap<AuthorEntity, AuthorModel>();
         CreateMap<BookGenre, BookGenreModel>();
-        CreateMap<BookTransferEntity, BookTransferModel>();
+        CreateMap<BookTransferEntity, BookTransferModel>()
+            .ForMember(x => x.BookName, y => y.MapFrom(z => z.BookEntity.Name))
+            .ForMember(x => x.Genre, y => y.MapFrom(z => z.BookEntity.Genre.Name))
+            .ForMember(x => x.Author, y => y.MapFrom(z => $"{z.BookEntity.AuthorEntity.Name} {z.BookEntity.AuthorEntity.Surname}"))
+            .ForMember(x => x.HasFines, y => y.MapFrom(z => z.Fines.Any()))
+            .ForMember(x => x.RentPrice, y => y.MapFrom(z => z.BookEntity.RentPrice));
         CreateMap<BudgetTransferEntity, BudgetTransferModel>();
         CreateMap<DiscountEntity, DiscountModel>();
         CreateMap<TransferType, TransferTypeModel>();
