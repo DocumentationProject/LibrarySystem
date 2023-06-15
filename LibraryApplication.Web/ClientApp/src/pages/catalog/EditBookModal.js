@@ -3,7 +3,7 @@ import {Button, Divider, Form, Input, InputNumber, Modal, notification, Select, 
 import { PlusOutlined } from '@ant-design/icons';
 import {API} from "../../configs/axios.config";
 
-const EditBookModal = ({book, setShowModal, setBooks}) => {
+const EditBookModal = ({book, setShowModal, getBooks}) => {
     const [authors, setAuthors] = useState([]);
     const [addAuthorNameInputValue, setAddAuthorNameInputValue] = useState('');
     const [addAuthorSurnameInputValue, setAddAuthorSurnameInputValue] = useState('');
@@ -75,8 +75,7 @@ const EditBookModal = ({book, setShowModal, setBooks}) => {
                 rentPrice: values.rentPrice,
                 isAvailable: values.isAvailable,
             })
-            const {data: newBook} = await API.get(`/api/Book/${book.id}`)
-            setBooks(prevBooks => prevBooks.map(b => (b.id === book.id ? newBook : book)))
+            await getBooks();
             setShowModal(false)
             notification.success({message: 'Book saved!'})
         } catch (e) {

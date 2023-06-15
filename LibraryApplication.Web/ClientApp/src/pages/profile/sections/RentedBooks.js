@@ -12,13 +12,17 @@ const RentedBooks = () => {
     const [loading, setLoading] = useState(false)
     const [authors, setAuthors] = useState([])
     const [genres, setGenres] = useState([])
+    
+    const getBooks = async () => {
+        const {data: newBooks} = await API.get(`/api/User/${user.id}/books`)
+        setBooks(newBooks)
+    }
 
     useEffect(() => {
         (async () => {
             setLoading(true)
             try {
-                const {data: newBooks} = await API.get(`/api/User/${user.id}/books`)
-                setBooks(newBooks)
+                await getBooks();
             } catch (e) {
                 console.log(e)
             }
@@ -90,6 +94,7 @@ const RentedBooks = () => {
                     try {
                         await API.post(`/api/Book/${book.key}/return`, {}, {params: {userId: user.id}})
                         notification.success({message: 'Book returned!'})
+                        await getBooks();
 
                     } catch (error) {
                         console.log(error)

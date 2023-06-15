@@ -7,7 +7,7 @@ import {API} from "../../configs/axios.config";
 import Paragraph from "antd/es/typography/Paragraph";
 import EditBookModal from "./EditBookModal";
 
-const BookCard = ({book, setBooks, authors, genres}) => {
+const BookCard = ({book, getBooks, authors, genres}) => {
     const { user } = useUser();
 
     const [showBorrowBookModal, setShowBorrowBookModal] = useState(false)
@@ -15,9 +15,11 @@ const BookCard = ({book, setBooks, authors, genres}) => {
 
     const handleDeleteBook = async () => {
         try {
-            await API.delete(`/api/Book/${book.id}/delete`)
-            notification.success({message: 'Book deleted!'})
-            setBooks(prevBooks => prevBooks.filter(b => b.id !== book.id))
+            const isSuccess = await API.delete(`/api/Book/${book.id}/delete`)
+            isSuccess.data === true 
+                ? notification.success({message: 'Book deleted!'})
+                : notification.error({message: 'Failed to delete book!'})
+            getBooks()
         } catch (e) {
             console.log(e)
         }
@@ -37,8 +39,8 @@ const BookCard = ({book, setBooks, authors, genres}) => {
             title={book.name}
             actions={cardActions}
         >
-            {showBorrowBookModal && <BorrowBookModal book={book} setShowModal={setShowBorrowBookModal}/>}
-            {showEditBookModal && <EditBookModal book={book} setShowModal={setShowEditBookModal} setBooks={setBooks}/>}
+            {showBorrowBookModal && <BorrowBookModal book={book} setShowModal={setShowBorrowBookModal} getBooks={getBooks}/>}
+            {showEditBookModal && <EditBookModal book={book} setShowModal={setShowEditBookModal} getBooks={getBooks}/>}
             <Paragraph>Author: {author?.name + " " + author?.surname}</Paragraph>
             <Paragraph>Genre: {genre?.name}</Paragraph>
             <Statistic
