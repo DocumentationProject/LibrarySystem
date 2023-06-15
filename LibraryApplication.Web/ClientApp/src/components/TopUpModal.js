@@ -10,8 +10,8 @@ const TopUpModal = ({setShowModal}) => {
 
     const onFinish = async (values) => {
         try {
-            const newUser = {...user, balance: user.balance + values.topUpAmount}
-            await API.put(`/api/User/${user.id}/edit`, newUser)
+            const newUser = {...user, balance: user?.balance + values.topUpAmount}
+            await API.put(`/api/User/${user?.id}/edit`, newUser)
             login(newUser)
             setShowModal(false)
         } catch (e) {

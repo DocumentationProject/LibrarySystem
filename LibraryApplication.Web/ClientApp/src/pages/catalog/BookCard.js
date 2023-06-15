@@ -26,7 +26,7 @@ const BookCard = ({book, getBooks, authors, genres}) => {
     }
 
     const cardActions = [<Button type='text' onClick={() => setShowBorrowBookModal(true)} icon={<BookOutlined key="borrow"  />} disabled={!book.isAvailable}/>]
-    if (user.isAdmin) {
+    if (user?.isAdmin) {
         cardActions.unshift(<Button type='text' onClick={handleDeleteBook} icon={<DeleteOutlined key="delete"  />}/>)
         cardActions.unshift(<Button type='text' onClick={() => setShowEditBookModal(true)} icon={<EditOutlined key="edit" />}/>)
     }

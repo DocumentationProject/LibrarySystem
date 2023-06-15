@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Form, InputNumber, Modal, notification} from "antd";
+import {Button, Form, Input, InputNumber, Modal, notification} from "antd";
 import {API} from "../../configs/axios.config";
 import {useUser} from "../../hooks/useUser";
 import {useAuth} from "../../hooks/useAuth";
@@ -10,10 +10,11 @@ const BorrowBookModal = ({book, setShowModal, getBooks}) => {
     const onFinish = async (values) => {
         try {
              const isSuccess = await API.post(`/api/Book/${book.id}/borrow`, {
-                    userId: user.id,
-                    rentInDays: values.rentInDays
+                    userId: user?.id,
+                    rentInDays: values.rentInDays,
+                    promoCode: values.promoCode
                 })
-            const {data: newUser} = await API.get(`/api/User/${user.id}`)
+            const {data: newUser} = await API.get(`/api/User/${user?.id}`)
             login(newUser)
             
             isSuccess.data === true 
@@ -52,6 +53,12 @@ const BorrowBookModal = ({book, setShowModal, getBooks}) => {
 
                 >
                     <InputNumber/>
+                </Form.Item>
+                <Form.Item
+                    name="promoCode"
+                    label="Promo code"
+                >
+                    <Input placeholder="Promo code" />
                 </Form.Item>
                 <Form.Item>
                     <Button type="primary" htmlType="submit">

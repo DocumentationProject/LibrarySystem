@@ -14,7 +14,7 @@ const RentedBooks = () => {
     const [genres, setGenres] = useState([])
     
     const getBooks = async () => {
-        const {data: newBooks} = await API.get(`/api/User/${user.id}/books`)
+        const {data: newBooks} = await API.get(`/api/User/${user?.id}/books`)
         setBooks(newBooks)
     }
 
@@ -92,7 +92,7 @@ const RentedBooks = () => {
             render: book => {
                 const handleReturnBook = async () => {
                     try {
-                        await API.post(`/api/Book/${book.key}/return`, {}, {params: {userId: user.id}})
+                        await API.post(`/api/Book/${book.key}/return`, {}, {params: {userId: user?.id}})
                         notification.success({message: 'Book returned!'})
                         await getBooks();
 
@@ -127,7 +127,7 @@ const RentedBooks = () => {
     }})
 
     return (
-        <>
+        <div className='mb-lg-4'>
             <Title level={2}>Rented books</Title>
             <Table
                 columns={columns}
@@ -135,7 +135,7 @@ const RentedBooks = () => {
                 pagination={false}
                 loading={loading}
             />
-        </>
+        </div>
     );
 };
 
