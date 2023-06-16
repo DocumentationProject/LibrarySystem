@@ -15,9 +15,9 @@ public class AdminController : ControllerBase
         this.adminService = adminService;
     }
 
-    [HttpPost("generate-past-fines")]
+        [HttpPost("generate-past-fines")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> GenerateFines([FromBody] int amount)
+    public async Task<IActionResult> GenerateFines([FromQuery] int amount)
     {
         await this.adminService.GenerateFinesPastDueDate(amount);
         return Ok();

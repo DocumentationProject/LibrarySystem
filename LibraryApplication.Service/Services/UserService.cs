@@ -10,15 +10,17 @@ public class UserService : BaseCrudService<UserModel, UserEntity>, IUserService
 {
     private readonly IUserRepository userRepository;
     private readonly IFineRepository fineRepository;
+    private readonly IBookRepository bookRepository;
 
     public UserService(
         IUserRepository userRepository,
         IFineRepository fineRepository, 
-        IMapper mapper) 
+        IMapper mapper, IBookRepository bookRepository) 
         : base(userRepository, mapper)
     {
         this.userRepository = userRepository;
         this.fineRepository = fineRepository;
+        this.bookRepository = bookRepository;
     }
 
     public Task<int?> Authenticate(string userInput, string passwordInput)
@@ -34,7 +36,11 @@ public class UserService : BaseCrudService<UserModel, UserEntity>, IUserService
     public async Task<List<BookTransferModel>> GetUserValidTransfers(int userId)
     {
         var transfers = await this.userRepository.GetUserValidTransfers(userId);
-        return this.Mapper.Map<List<BookTransferModel>>(transfers);
+        var books = await this.bookRepository.GetBorrowedBooksByUser(userId);
+        var result = transfers.Where(x => 
+            books.Select(x => x.Id).Contains(x.BookId) && x.IsBorrowed).GroupBy(x => x.BookId)
+            .Select(x =>x.LastOrDefault());
+        return this.Mapper.Map<List<BookTransferModel>>(result);
     }
 
     public async Task<bool> TryProcessFinePayment(int userId, int bookId)
